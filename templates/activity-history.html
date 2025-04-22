@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Your Learning Activity{% endblock %}
+
+{% block content %}
+    <h1>Your Learning Activity</h1>
+    
+    {% if activities %}
+        <div class="activity-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Activity</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in activities %}
+                    <tr>
+                        <td>{{ activity.timestamp }}</td>
+                        <td>{{ activity.type }}</td>
+                        <td>{{ activity.details }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No activities recorded yet. Start exploring plants!</p>
+    {% endif %}
+    
+    <div class="navigation-buttons">
+        <a href="{{ url_for('plants') }}" class="nav-button">Back to Plants</a>
+    </div>
+{% endblock %}

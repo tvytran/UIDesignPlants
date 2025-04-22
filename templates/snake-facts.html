@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Snake Plant - Fun Facts{% endblock %}
+
+{% block content %}
+<div class="plant-facts-container">
+    <h1>Snake Plant</h1>
+    
+    <div class="facts-modal">
+        <div class="modal-header">
+            <a href="{{ url_for('snake_plant') }}" class="close-button">&times;</a>
+        </div>
+        
+        <div class="facts-content">
+            <ul class="facts-list">
+                <li>They are great for air purification.</li>
+                <li>Snake plants originate from Africa and Asia.</li>
+                <li>Snake plants are often found in offices because of they require low maintenance and often used by interior designers.</li>
+            </ul>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

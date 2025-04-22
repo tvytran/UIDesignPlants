@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}4 Common House Plants{% endblock %}
+
+{% block content %}
+    <h1>4 Common House Plants</h1>
+    <p class="instructions">Click on a plant to learn more about it and its lighting</p>
+    
+    <div class="plants-grid">
+        <div class="plant-card">
+            <a href="{{ url_for('snake_plant') }}">
+                <img src="{{ url_for('static', filename='images/snake-plant.jpg') }}" alt="Snake plant">
+                <h2>Snake plant</h2>
+            </a>
+        </div>
+        
+        <div class="plant-card">
+            <a href="{{ url_for('peace_lily') }}">
+                <img src="{{ url_for('static', filename='images/peace-lily.jpg') }}" alt="Peace Lily">
+                <h2>Peace Lily</h2>
+            </a>
+        </div>
+        
+        <div class="plant-card">
+            <a href="{{ url_for('spider_lily') }}">
+                <img src="{{ url_for('static', filename='images/spider-lily.jpg') }}" alt="Spider Lily">
+                <h2>Spider Lily</h2>
+            </a>
+        </div>
+        
+        <div class="plant-card">
+            <a href="{{ url_for('fiddle_leaf_fig') }}">
+                <img src="{{ url_for('static', filename='images/fiddle-leaf-fig.jpg') }}" alt="Fiddle-leaf fig">
+                <h2>Fiddle-leaf fig</h2>
+            </a>
+        </div>
+    </div>
+{% endblock %}

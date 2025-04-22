@@ -1,0 +1,381 @@
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0efd4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header and Navigation */
+header {
+    background-color: white;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 70px;
+}
+
+.logo a {
+    color: #5a623a;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #5a623a;
+}
+
+/* Content area */
+.content {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+h1 {
+    color: #5a623a;
+    font-size: 32px;
+    margin-bottom: 60px;
+}
+
+.start-button {
+    display: inline-block;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 20px 80px;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.start-button:hover {
+    background-color: #eaeaea;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .main-nav {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+    }
+    
+    .nav-links {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav-links li {
+        margin: 5px 10px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+}
+
+/* Plants grid styles */
+.instructions {
+    color: #5a623a;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.plants-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.plant-card {
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.plant-card:hover {
+    transform: translateY(-5px);
+}
+
+.plant-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.plant-card h2 {
+    color: #5a623a;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.plant-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Plant detail page styles */
+.plant-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.plant-detail-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+    margin-bottom: 30px;
+}
+
+.plant-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-button {
+    display: block;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 15px 30px;
+    width: 200px;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.info-button:hover {
+    background-color: #eaeaea;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    max-width: 500px;
+    margin: 20px auto 0;
+}
+
+.nav-button {
+    display: inline-block;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 15px 30px;
+    min-width: 120px;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #eaeaea;
+}
+
+/* Make plant detail responsive */
+@media (min-width: 768px) {
+    .plant-detail {
+        flex-direction: row;
+        justify-content: center;
+        gap: 50px;
+        align-items: flex-start;
+    }
+    
+    .plant-detail-image {
+        margin-bottom: 0;
+    }
+}
+
+
+/* Lighting placement modal styles */
+.plant-lighting-container {
+    position: relative;
+}
+
+.lighting-modal {
+    background-color: #4ab2c0;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.modal-header {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.close-button {
+    font-size: 36px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+}
+
+.lighting-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.lighting-diagram {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border: 5px solid #fff9f4;
+}
+
+.try-button {
+    display: inline-block;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 20px;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+}
+
+.try-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Make sure the navigation buttons are visible on the modal */
+.lighting-modal .navigation-buttons {
+    border-top: none;
+    padding-top: 0;
+}
+
+.lighting-modal .nav-button {
+    background-color: #f5f5f5;
+}
+
+
+/* Fun facts modal styles */
+.facts-modal {
+    background-color: #4ab2c0;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.modal-header {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.close-button {
+    font-size: 36px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.facts-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.facts-list {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.facts-list li {
+    margin-bottom: 15px;
+    font-size: 18px;
+    position: relative;
+    padding-left: 25px;
+}
+
+.facts-list li:before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.facts-plant-image {
+    max-width: 200px;
+    height: auto;
+    opacity: 0.8;
+    margin: 0 auto;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 768px) {
+    .facts-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .facts-list {
+        width: 65%;
+        margin-bottom: 0;
+    }
+    
+    .facts-plant-image {
+        width: 30%;
+    }
+}
+
+/* Responsive grid */
+@media (max-width: 992px) {
+    .plants-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .plants-grid {
+        grid-template-columns: 1fr;
+    }
+}

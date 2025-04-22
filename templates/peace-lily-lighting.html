@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Peace Lily - Lighting Placement{% endblock %}
+
+{% block content %}
+<div class="plant-lighting-container">
+    <h1>Peace Lily</h1>
+    
+    <div class="lighting-modal">
+        <div class="modal-header">
+            <a href="{{ url_for('peace_lily') }}" class="close-button">&times;</a>
+        </div>
+        
+        <div class="lighting-content">
+            <img src="{{ url_for('static', filename='images/peace-lily-lighting-diagram.jpg') }}" alt="Peace lily lighting diagram showing placement options in a living room" class="lighting-diagram">
+            
+            <a href="{{ url_for('try_yourself') }}" class="try-button">Try it yourself</a>
+        </div>
+        
+        
+    </div>
+</div>
+{% endblock %}

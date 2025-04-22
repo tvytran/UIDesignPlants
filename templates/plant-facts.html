@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{ plant.name }} - Fun Facts{% endblock %}
+
+{% block content %}
+<div class="plant-facts-container">
+    <h1>{{ plant.name }}</h1>
+    
+    <div class="facts-modal">
+        <div class="modal-header">
+            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" class="close-button">&times;</a>
+        </div>
+        
+        <div class="facts-content">
+            <ul class="facts-list">
+                {% for fact in plant.facts %}
+                <li>{{ fact }}</li>
+                {% endfor %}
+            </ul>
+            
+            <!--<img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" class="facts-plant-image">-->
+        </div>
+    </div>
+</div>
+{% endblock %}

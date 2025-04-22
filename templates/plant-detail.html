@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ plant.name }} - Care and Information{% endblock %}
+
+{% block content %}
+    <h1>{{ plant.name }}</h1>
+    
+    <div class="plant-detail">
+        <div class="plant-image-container">
+            <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" class="plant-detail-image">
+        </div>
+        
+        <div class="plant-info">
+            <a href="{{ url_for('plant_lighting', plant_id=plant_id) }}" class="info-button">Lighting placement</a>
+            
+            <a href="{{ url_for('plant_facts', plant_id=plant_id) }}" class="info-button">Fun facts</a>
+        </div>
+    </div>
+    
+    <div class="navigation-buttons">
+        <a href="{{ url_for('plants') }}" class="nav-button">return</a>
+        <!-- Next button logic would need to be added here -->
+    </div>
+{% endblock %}

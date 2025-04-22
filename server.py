@@ -1,6 +1,12 @@
 from flask import Flask, render_template
+import json
 
 app = Flask(__name__)
+
+
+# Load plant data
+with open('static/js/plants.json') as f:
+    plants_data = json.load(f)
 
 @app.route('/')
 def home():
@@ -8,55 +14,37 @@ def home():
 
 @app.route('/plants')
 def plants():
-    return render_template('plants.html')
+    return render_template('plants.html', plants=plants_data['plants'])
 
+@app.route('/plants/<plant_id>')
+def plant_detail(plant_id):
+    if plant_id in plants_data['plants']:
+        plant = plants_data['plants'][plant_id]
+        return render_template('plant-detail.html', plant=plant, plant_id=plant_id)
+    else:
+        return "Plant not found", 404
 
+@app.route('/plants/<plant_id>/lighting')
+def plant_lighting(plant_id):
+    if plant_id in plants_data['plants']:
+        plant = plants_data['plants'][plant_id]
+        return render_template('plant-lighting.html', plant=plant, plant_id=plant_id)
+    else:
+        return "Plant not found", 404
 
-@app.route('/plants/snake-plant')
-def snake_plant():
-    return render_template('snake-plant.html')
+@app.route('/plants/<plant_id>/facts')
+def plant_facts(plant_id):
+    if plant_id in plants_data['plants']:
+        plant = plants_data['plants'][plant_id]
+        return render_template('plant-facts.html', plant=plant, plant_id=plant_id)
+    else:
+        return "Plant not found", 404
 
-@app.route('/plants/snake-plant/lighting')
-def snake_lighting():
-    return render_template('snake-plant-lighting.html')
-
-@app.route('/try-yourself')
+@app.route('/try_youorself')
 def try_yourself():
-    # Placeholder for now
-    return "This feature is coming soon!"
+    return "Coming Soon"
+    
 
-@app.route('/plants/snake-plant/facts')
-def snake_facts():
-    return render_template('snake-facts.html')
-
-
-
-
-@app.route('/plants/peace-lily')
-def peace_lily():
-    return render_template('peace-lily.html')
-
-@app.route('/plants/peace-lily/lighting')
-def peace_lily_lighting():
-    return render_template('peace-lily-lighting.html')
-
-
-
-@app.route('/plant/peace-lily-facts/facts')
-def peace_lily_facts():
-    return render_template('peace-lily-facts.html')
-
-
-
-
-
-@app.route('/plants/spider-lily')
-def spider_lily():
-    return render_template('spider-lily.html')
-
-@app.route('/plants/fiddle-leaf-fig')
-def fiddle_leaf_fig():
-    return render_template('fiddle-leaf-fig.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

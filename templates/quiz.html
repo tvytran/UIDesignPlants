@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Quiz Time! - Place {{ question.plant.replace('-', ' ').title() }}{% endblock %}
+{% block title %}Quiz Time! - Question {{ question_num }}{% endblock %}
 
 {% block content %}
     <div class="text-center">
+        {# Progress Indicator #}
+        <div class="mb-4 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+            Question {{ question_num }} / 4
+        </div>
+
         <h2 class="text-2xl font-bold text-duo-text mb-4">Where does the {{ question.plant.replace('-', ' ').title() }} belong?</h2>
         <p class="text-gray-500 mb-8">Drag the plant to the correct lighting zone in the image below!</p>
 
@@ -18,15 +23,17 @@
                  class="plant max-h-20 cursor-grab active:cursor-grabbing border-4 border-transparent hover:border-duo-blue rounded-lg transition-all duration-150">
         </div>
 
-        <div class="quiz-background relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 min-h-[350px] md:min-h-[450px] overflow-hidden shadow-inner" id="background">
-            <!-- Background image is likely applied via CSS/JS -->
-             <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400 font-semibold">Drop Zone</p>
+        {# Apply consistent background/sizing/style to quiz drop zone #}
+        <div id="background" 
+             class="relative w-full max-w-xl mx-auto rounded-xl shadow-lg border border-gray-200 overflow-hidden" 
+             style="padding-top: 66.66%; background-image: url('{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}'); background-size: cover; background-position: center;">
+             {# Placeholder text removed, background image set #}
         </div>
 
         <div class="mt-8">
             <button id="submit-btn" 
                     disabled 
-                    class="w-full sm:w-auto bg-duo-green hover:bg-duo-green-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider py-3 px-10 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-none">
+                    class="w-full sm:w-auto bg-duo-green hover:bg-duo-green-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-none">
                     Check Answer
             </button>
         </div>

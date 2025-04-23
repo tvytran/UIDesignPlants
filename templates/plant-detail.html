@@ -3,35 +3,154 @@
 {% block title %}{{ plant.name }} - PlantPal{% endblock %}
 
 {% block content %}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-        
-        <div class="plant-image-section text-center">
-            <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
-                 class="w-full max-w-sm mx-auto rounded-2xl shadow-lg border border-gray-200 object-cover h-80 md:h-96">
+    <div class="plant-detail-container">
+        {# Top Section: Plant Name #}
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-duo-text mb-8 text-center">{{ plant.name }}</h1>
+
+        {# Tab Navigation #}
+        <div class="mb-6 border-b border-gray-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="plantTab" role="tablist">
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg font-bold uppercase tracking-wider" id="overview-tab" data-tabs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Overview</button>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg font-bold uppercase tracking-wider border-transparent hover:text-gray-600 hover:border-gray-300" id="lighting-tab" data-tabs-target="#lighting" type="button" role="tab" aria-controls="lighting" aria-selected="false">💡 Lighting</button>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg font-bold uppercase tracking-wider border-transparent hover:text-gray-600 hover:border-gray-300" id="facts-tab" data-tabs-target="#facts" type="button" role="tab" aria-controls="facts" aria-selected="false">✨ Facts</button>
+                </li>
+            </ul>
         </div>
-        
-        <div class="plant-info-section mt-6 md:mt-0">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-duo-text mb-6">{{ plant.name }}</h1>
-            
-            <div class="space-y-4">
-                <a href="{{ url_for('plant_lighting', plant_id=plant_id) }}" 
-                   class="flex items-center justify-center w-full bg-duo-blue hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
-                    <span>💡 Lighting Guide</span>
-                </a>
-                
-                <a href="{{ url_for('plant_facts', plant_id=plant_id) }}" 
-                   class="flex items-center justify-center w-full bg-duo-yellow hover:bg-amber-500 text-duo-text font-bold py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
-                    <span>✨ Fun Facts</span>
-                </a>
+
+        {# Tab Content #}
+        <div id="plantTabContent">
+            {# Overview Tab Panel #}
+            <div class="" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center p-4">
+                    <div class="plant-image-section text-center">
+                        <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
+                             class="w-full max-w-sm mx-auto rounded-2xl shadow-lg border border-gray-200 object-cover h-80 md:h-96">
+                    </div>
+                    <div class="plant-overview-text">
+                         <h2 class="text-2xl font-bold text-duo-text mb-4">About {{ plant.name }}</h2>
+                         <p class="text-gray-600 leading-relaxed">
+                            {# Add general description if available in plants.json, otherwise a placeholder #}
+                            {{ plant.description if plant.description else "Learn more about this plant's lighting needs and fun facts in the other tabs!" }}
+                         </p>
+                         {# Add more care info here if available #}
+                    </div>
+                </div>
             </div>
 
-             <div class="mt-10 text-center">
-                <a href="{{ url_for('plants') }}" 
-                   class="inline-block text-gray-500 hover:text-duo-green font-semibold text-sm underline underline-offset-2">
-                    &larr; Back to All Plants
-                </a>
+            {# Lighting Tab Panel (Initially Hidden) #}
+            <div class="hidden p-4 rounded-lg bg-gray-50" id="lighting" role="tabpanel" aria-labelledby="lighting-tab">
+                <h2 class="text-2xl font-bold text-duo-text mb-2 text-center">Ideal Lighting Spot</h2>
+                <p class="text-gray-500 mb-6 max-w-lg mx-auto text-center">
+                    Based on its needs (<strong>{{ correct_zone.replace('-', ' ').title() if correct_zone else 'Unknown Zone' }}</strong>), 
+                    this is the ideal spot for your {{ plant.name }} in this room layout:
+                </p>
+                {# Define zone positions #}
+                {# bright-indirect: Top-Left #}
+                {# low-medium: Top-Right #}
+                {# moderate-indirect: Bottom-Left #}
+                {# bright-filtered: Bottom-Right #}
+                {% set zone_styles = {
+                    'bright-indirect': 'top: 25%; left: 25%;',
+                    'low-medium': 'top: 25%; left: 75%;',
+                    'moderate-indirect': 'top: 75%; left: 25%;',
+                    'bright-filtered': 'top: 75%; left: 75%;'
+                } %}
+                {% set position_style = zone_styles.get(correct_zone, 'top: 50%; left: 50%;') %}
+                
+                {# Container for the background image - Apply consistent styles #}
+                <div class="relative w-full max-w-xl mx-auto rounded-xl shadow-lg border border-gray-200 overflow-hidden" 
+                     style="padding-top: 66.66%; background-image: url('{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}'); background-size: cover; background-position: center;"> 
+                    {# Position the plant image #}
+                    {% if correct_zone %}
+                    <img src="{{ url_for('static', filename='images/' + plant.image) }}" 
+                         alt="{{ plant.name }} placed in its ideal lighting spot ({{ correct_zone.replace('-', ' ').title() }})"
+                         title="Ideal Spot: {{ correct_zone.replace('-', ' ').title() }}"
+                         class="absolute w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-full shadow-xl"
+                         style="{{ position_style }}">
+                    {% else %}
+                     <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-600 font-semibold bg-white/80 p-2 rounded">Could not determine correct lighting zone.</p>
+                    {% endif %}
+                </div>
             </div>
+
+            {# Facts Tab Panel (Initially Hidden) #}
+            <div class="hidden p-4 rounded-lg bg-gray-50" id="facts" role="tabpanel" aria-labelledby="facts-tab">
+                 <div class="max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold text-duo-text mb-4 text-center">Fun Facts! ✨</h2>
+                     <div class="text-left bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        {% if plant.facts %}
+                        <ul class="list-disc list-outside pl-5 space-y-3 text-duo-text">
+                            {% for fact in plant.facts %}
+                            <li class="leading-relaxed">{{ fact }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-gray-500 italic">No fun facts available for this plant yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Consistent Back Link #}
+         <div class="mt-12 text-center">
+            <a href="{{ url_for('plants') }}" 
+               class="inline-block text-gray-500 hover:text-duo-green font-semibold text-sm underline underline-offset-2">
+                &larr; Back to All Plants
+            </a>
         </div>
 
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Basic Tab Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabElements = document.querySelectorAll('[data-tabs-target]');
+        const tabContent = document.getElementById('plantTabContent');
+
+        // Set initial active tab styles
+        const initialActiveTab = document.querySelector('#plantTab [aria-selected="true"]');
+        if (initialActiveTab) {
+             initialActiveTab.classList.add('text-duo-blue', 'border-duo-blue');
+             initialActiveTab.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+        }
+
+        tabElements.forEach(tab => {
+            tab.addEventListener('click', event => {
+                const targetSelector = event.target.getAttribute('data-tabs-target');
+                const targetPanel = document.querySelector(targetSelector);
+
+                // Hide all panels
+                tabContent.querySelectorAll('[role="tabpanel"]').forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+
+                // Deactivate all tabs
+                 document.querySelectorAll('#plantTab [role="tab"]').forEach(t => {
+                    t.setAttribute('aria-selected', 'false');
+                    t.classList.remove('text-duo-blue', 'border-duo-blue');
+                    t.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+                 });
+
+                // Show target panel
+                if (targetPanel) {
+                    targetPanel.classList.remove('hidden');
+                }
+
+                // Activate clicked tab
+                event.target.setAttribute('aria-selected', 'true');
+                event.target.classList.add('text-duo-blue', 'border-duo-blue');
+                event.target.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+                
+            });
+        });
+    });
+</script>
 {% endblock %}

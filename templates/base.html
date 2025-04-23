@@ -48,11 +48,21 @@
                     <a href="{{ url_for('home') }}">🌿 PlantPal</a>
                 </div>
                 <ul class="nav-links flex space-x-3 sm:space-x-4 items-center">
-                    <li><a href="{{ url_for('home') }}" class="text-gray-600 hover:text-duo-green font-bold px-3 py-2 rounded-lg text-sm uppercase tracking-wider">Home</a></li>
-                    <li><a href="{{ url_for('plants') }}" class="text-gray-600 hover:text-duo-green font-bold px-3 py-2 rounded-lg text-sm uppercase tracking-wider">Learn</a></li>
+                    {# Define active classes #}
+                    {% set active_class = 'bg-green-100 text-duo-green font-bold' %}
+                    {% set inactive_class = 'text-gray-600 hover:text-duo-green font-bold' %}
+                    
+                    <li><a href="{{ url_for('home') }}" 
+                           class="px-3 py-2 rounded-lg text-sm uppercase tracking-wider {{ active_class if request.endpoint == 'home' else inactive_class }}">Home</a></li>
+                    <li><a href="{{ url_for('plants') }}" 
+                           class="px-3 py-2 rounded-lg text-sm uppercase tracking-wider {{ active_class if request.endpoint == 'plants' or request.endpoint == 'plant_detail' else inactive_class }}">Plants</a> {# Renamed from Learn #}</li>
                     <li><a href="{{ url_for('quiz', question_num=1) }}" 
-                           class="bg-duo-blue hover:bg-sky-600 text-white font-bold py-2 px-5 rounded-full text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
+                           class="bg-duo-blue hover:bg-sky-600 text-white font-bold py-2 px-5 rounded-full text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5 {{ 'ring-2 ring-offset-2 ring-duo-blue' if request.endpoint == 'quiz' or request.endpoint == 'results' }}"> {# Added ring for active quiz/results #}
                            Quiz Time!</a></li>
+                    {# Add Activity History Link? Example:
+                    <li><a href="{{ url_for('activity_history') }}" 
+                           class="px-3 py-2 rounded-lg text-sm uppercase tracking-wider {{ active_class if request.endpoint == 'activity_history' else inactive_class }}">History</a></li>
+                    #}       
                 </ul>
             </nav>
         </header>

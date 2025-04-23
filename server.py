@@ -42,39 +42,28 @@ def plants():
 def plant_detail(plant_id):
     if plant_id in plants_data['plants']:
         plant = plants_data['plants'][plant_id]
-        record_user_activity('plant_selection', plant_id)
-        return render_template('plant-detail.html', plant=plant, plant_id=plant_id)
-    else:
-        return "Plant not found", 404
-
-@app.route('/plants/<plant_id>/lighting')
-def plant_lighting(plant_id):
-    if plant_id in plants_data['plants']:
-        plant = plants_data['plants'][plant_id]
         
-        # Load quiz data to find the correct zone
+        # Load quiz data to find the correct zone for this plant
         correct_zone = None
         try:
             with open('static/js/quiz.json') as f:
                 quiz_questions = json.load(f)['questions']
-                # Find the question for the current plant_id
                 question_data = next((q for q in quiz_questions if q['plant'] == plant_id), None)
                 if question_data:
                     correct_zone = question_data['correct_zone']
         except FileNotFoundError:
-            # Handle case where quiz data is missing - log or provide default
             print(f"Warning: static/js/quiz.json not found.")
         except Exception as e:
-             print(f"Error loading or parsing quiz.json: {e}")
+             print(f"Error loading or parsing quiz.json in plant_detail: {e}")
 
-        record_user_activity('viewed_lighting', plant_id)
+        record_user_activity('plant_selection', plant_id)
         
         # --- DEBUG PRINT --- 
-        print(f"[DEBUG] Lighting route: plant_id='{plant_id}', found correct_zone='{correct_zone}'")
+        # print(f"[DEBUG] Detail route: plant_id='{plant_id}', found correct_zone='{correct_zone}'")
         # --- END DEBUG PRINT ---
-        
-        # Pass the correct_zone to the template
-        return render_template('plant-lighting.html', 
+
+        # Pass all necessary data to the single detail template
+        return render_template('plant-detail.html', 
                                plant=plant, 
                                plant_id=plant_id, 
                                correct_zone=correct_zone)

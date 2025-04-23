@@ -3,68 +3,82 @@
 {% block title %}Quiz Results!{% endblock %}
 
 {% block content %}
-    <div class="text-center">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-duo-text mb-4">Quiz Complete! 🎉</h1>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-success mb-3">Quiz Complete! 🎉</h1>
         
         {# Calculate score percentage #}
-        {% set score_percent = (score / total * 100) if total > 0 else 0 %}
+        {% set score_percent = (score / total * 100) | round(0) | int if total > 0 else 0 %}
         
-        {# Add dynamic message based on score #}
-        <p class="text-xl text-gray-600 mb-2">
-            {% if score_percent == 100 %}
-                Wow! Perfect Score! 🥳 You're a plant expert!
-            {% elif score_percent >= 75 %}
-                Great job! You really know your plants! 👍
-            {% elif score_percent >= 50 %}
-                Nicely done! Keep learning! 🌱
-            {% else %}
-                Good effort! Review the answers below and try again! 💪
-            {% endif %}
-        </p>
-        
-        <p class="text-lg text-gray-500 mb-8">
-            You scored <strong class="text-2xl font-bold text-duo-green">{{ score }}</strong> out of <strong class="text-2xl font-bold text-duo-green">{{ total }}</strong> correct!
-        </p>
-
-        <div class="results-summary overflow-x-auto relative shadow-md rounded-lg border border-gray-200 mb-10">
-            <table class="w-full text-sm text-left text-gray-600">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
-                    <tr>
-                        <th scope="col" class="py-3 px-6">Plant</th>
-                        <th scope="col" class="py-3 px-6">Your Placement</th>
-                        <th scope="col" class="py-3 px-6">Correct Zone</th>
-                        <th scope="col" class="py-3 px-6">Result</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for placement in placements %}
-                    <tr class="bg-white border-b hover:bg-green-50">
-                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">{{ placement.plant.replace('-', ' ').title() }}</th>
-                        <td class="py-4 px-6">{{ placement.zone.replace('-', ' ').title() }}</td>
-                        <td class="py-4 px-6">{{ placement.correct_zone.replace('-', ' ').title() }}</td>
-                        <td class="py-4 px-6 font-bold">
-                            {% if placement.correct %}
-                                <span class="text-green-600">✅ Correct</span>
-                            {% else %}
-                                <span class="text-red-600">❌ Incorrect</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        {# Dynamic message based on score - Using Bootstrap Alert #}
+        <div class="alert {{ 'alert-success' if score_percent >= 75 else ('alert-info' if score_percent >= 50 else 'alert-warning') }} mx-auto" role="alert" style="max-width: 600px;">
+            <h4 class="alert-heading fw-bold">
+                 {% if score_percent == 100 %}
+                    Perfect Score! 🥳
+                {% elif score_percent >= 75 %}
+                    Great Job! 👍
+                {% elif score_percent >= 50 %}
+                    Nicely Done! 🌱
+                {% else %}
+                    Good Effort! 💪
+                {% endif %}
+            </h4>
+            <p class="mb-0">
+                 {% if score_percent == 100 %}
+                    You're a plant expert!
+                {% elif score_percent >= 75 %}
+                    You really know your plants!
+                {% elif score_percent >= 50 %}
+                    Keep learning!
+                {% else %}
+                    Review the answers below and try again!
+                {% endif %}
+            </p>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <a href="{{ url_for('reset_quiz') }}" 
-               class="w-full sm:w-auto bg-duo-green hover:bg-duo-green-dark text-white font-bold uppercase tracking-wider py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
-               Try Again?
-            </a>
-             <a href="{{ url_for('home') }}" 
-                class="w-full sm:w-auto bg-duo-blue hover:bg-sky-600 text-white font-bold uppercase tracking-wider py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
-                Go Home
-            </a>
-        </div>
+        <p class="fs-4 mt-4">
+            You scored <strong class="fw-bold text-success">{{ score }}</strong> out of <strong class="fw-bold">{{ total }}</strong> correct!
+        </p>
     </div>
+
+    <h2 class="h4 fw-bold mb-3 text-center">Your Results Summary</h2>
+    <div class="table-responsive shadow-sm rounded border mb-5 mx-auto" style="max-width: 800px;">
+        <table class="table table-striped table-hover mb-0 align-middle">
+            <thead class="table-light text-uppercase small">
+                <tr>
+                    <th scope="col" class="px-3 py-2">Plant</th>
+                    <th scope="col" class="px-3 py-2">Your Placement</th>
+                    <th scope="col" class="px-3 py-2">Correct Zone</th>
+                    <th scope="col" class="px-3 py-2 text-center">Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for placement in placements %}
+                <tr>
+                    <td class="px-3 py-2 fw-semibold">{{ placement.plant.replace('-', ' ').title() }}</td>
+                    <td class="px-3 py-2">{{ placement.zone.replace('-', ' ').title() }}</td>
+                    <td class="px-3 py-2">{{ placement.correct_zone.replace('-', ' ').title() }}</td>
+                    <td class="px-3 py-2 text-center">
+                        {% if placement.correct %}
+                            <span class="badge bg-success rounded-pill py-1 px-2"><i class="bi bi-check-circle me-1"></i> Correct</span>
+                        {% else %}
+                            <span class="badge bg-danger rounded-pill py-1 px-2"><i class="bi bi-x-circle me-1"></i> Incorrect</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center d-grid gap-3 d-sm-flex justify-content-sm-center">
+        <a href="{{ url_for('reset_quiz') }}" class="btn btn-success btn-lg">
+           <i class="bi bi-arrow-clockwise me-2"></i>Try Again?
+        </a>
+         <a href="{{ url_for('home') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="bi bi-house-door me-2"></i>Go Home
+        </a>
+    </div>
+</div>
 
 {% endblock %}

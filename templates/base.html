@@ -1,90 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light"> {# Default theme #}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PlantPal - Your Plant Friend{% endblock %}</title>
-    <!-- Using Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        
-        tailwind.config = {
-          theme: {
-            extend: {
-              fontFamily: {
-                sans: ['Quicksand', 'sans-serif'], // Use Quicksand as the primary font
-              },
-              colors: {
-                'duo-green': '#58CC02',      
-                'duo-green-dark': '#46A301',
-                'duo-blue': '#1CB0F6',        // A common accent blue
-                'duo-yellow': '#FFC800',
-                'duo-light-bg': '#F7F7F7',    // Light background
-                'duo-text': '#4B4B4B',        // Darker text for contrast
-              }
-            }
-          }
-        }
-      </script>
-    {% block extra_css %}{% endblock %}
-    <!-- Google Fonts - Quicksand -->
+    <title>{% block title %}PlantPal{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Font: Nunito -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Apply Quicksand globally */
-        body {
-            font-family: 'Quicksand', sans-serif;
-        }
-        /* Add a subtle pattern like Duolingo's background? Optional */
-        /* body { background-image: url(...); } */
-    </style>
-</head>
-<body class="bg-duo-light-bg text-duo-text font-sans">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <header class="mb-10">
-            <nav class="flex items-center justify-between">
-                <div class="logo text-3xl font-extrabold text-duo-green">
-                    <a href="{{ url_for('home') }}">🌿 PlantPal</a>
-                </div>
-                <ul class="nav-links flex space-x-3 sm:space-x-4 items-center">
-                    {# Define active classes #}
-                    {% set active_class = 'bg-green-100 text-duo-green font-bold' %}
-                    {% set inactive_class = 'text-gray-600 hover:text-duo-green font-bold' %}
-                    
-                    <li><a href="{{ url_for('home') }}" 
-                           class="px-3 py-2 rounded-lg text-sm uppercase tracking-wider {{ active_class if request.endpoint == 'home' else inactive_class }}">Home</a></li>
-                    <li><a href="{{ url_for('plants') }}" 
-                           class="px-3 py-2 rounded-lg text-sm uppercase tracking-wider {{ active_class if request.endpoint == 'plants' or request.endpoint == 'plant_detail' else inactive_class }}">Plants</a> {# Renamed from Learn #}</li>
-                    <li><a href="{{ url_for('quiz', question_num=1) }}" 
-                           class="bg-duo-blue hover:bg-sky-600 text-white font-bold py-2 px-5 rounded-full text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5 {{ 'ring-2 ring-offset-2 ring-duo-blue' if request.endpoint == 'quiz' or request.endpoint == 'results' }}"> {# Added ring for active quiz/results #}
-                           Quiz Time!</a></li>
-                    {# Add Activity History Link? Example:
-                    <li><a href="{{ url_for('activity_history') }}" 
-                           class="px-3 py-2 rounded-lg text-sm uppercase tracking-wider {{ active_class if request.endpoint == 'activity_history' else inactive_class }}">History</a></li>
-                    #}       
-                </ul>
-            </nav>
-        </header>
-        
-        <main class="content bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-200">
-            {% block content %}{% endblock %}
-        </main>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-        <footer class="text-center mt-12 text-gray-500 text-sm">
-            <p>&copy; {{ current_year }} PlantPal. Happy Planting!</p>
-        </footer>
-    </div>
-    
-    {% block scripts %}{% endblock %}
-    <script>
-      // Add current year to footer
-      document.addEventListener('DOMContentLoaded', (event) => {
-        const currentYear = new Date().getFullYear();
-        const footer = document.querySelector('footer p');
-        if (footer) { 
-          footer.innerHTML = `&copy; ${currentYear} PlantPal. Happy Planting!`;
+    <style>
+        /* --- Duolingo Inspired Theme --- */
+        :root {
+            --duo-green: #58CC02;
+            --duo-green-dark: #4aa502;
+            --duo-blue: #1cb0f6;
+            --duo-blue-dark: #1899d6;
+            --duo-orange: #ff9600;
+            --duo-bg-pale-green: #f4fbf5; /* New pale green background */
+            --duo-gray-medium: #afafaf; /* Borders / Muted text */
+            --duo-gray-hover: #e5e5e5; /* Slightly darker gray for hover */
+            --duo-text: #4b4b4b; /* Main text */
+            --duo-white: #ffffff;
+            
+            /* Override Bootstrap variables (optional but helpful) */
+            --bs-body-font-family: 'Nunito', sans-serif;
+            --bs-body-color: var(--duo-text);
+            --bs-body-bg: var(--duo-bg-pale-green); /* Use pale green */
+            --bs-border-color: var(--duo-gray-medium);
+            --bs-success: var(--duo-green);
+            --bs-success-rgb: 88, 204, 2;
+            --bs-primary: var(--duo-green); /* Use green as primary */
+            --bs-primary-rgb: 88, 204, 2;
+            --bs-info: var(--duo-blue);
+            --bs-info-rgb: 28, 176, 246;
         }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: var(--bs-body-font-family);
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+        }
+        main {
+            flex-grow: 1; 
+        }
+        
+        /* Navbar */
+        .navbar {
+            background-color: var(--duo-white) !important;
+            border-bottom: 2px solid var(--bs-border-color) !important;
+            box-shadow: none !important; /* Remove default shadow, rely on border */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .navbar-brand {
+            color: var(--duo-green) !important;
+            font-weight: 800; /* Extra bold */
+            font-size: 1.5rem;
+        }
+        .navbar-brand .bi {
+            font-size: 1.6rem; /* Slightly larger icon */
+        }
+        .nav-link {
+            color: var(--duo-text) !important;
+            font-weight: 700; /* Bold links */
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 0.75rem; /* Rounded hover/active */
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .nav-link:hover {
+             background-color: var(--duo-gray-hover); /* Use darker gray for hover */
+        }
+        .nav-link.active {
+            color: var(--duo-green) !important;
+            background-color: transparent;
+             border-bottom: 3px solid var(--duo-green);
+             border-radius: 0;
+             padding-bottom: calc(0.5rem - 3px);
+        }
+
+        /* Buttons */
+        .btn {
+             font-weight: 700; /* Bold button text */
+             border-radius: 0.75rem; /* Rounded buttons */
+             border-width: 2px;
+             text-transform: uppercase;
+             padding: 0.6rem 1.25rem;
+             box-shadow: 0 4px 0 rgba(0,0,0,0.2); /* Subtle bottom shadow */
+             transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+        .btn-success {
+            background-color: var(--duo-green);
+            border-color: var(--duo-green-dark);
+            color: var(--duo-white);
+        }
+        .btn-success:hover, .btn-success:focus {
+             background-color: var(--duo-green-dark);
+             border-color: var(--duo-green-dark);
+             color: var(--duo-white);
+        }
+         .btn-info, .btn-quiz-nav { /* Style quiz button like Duo blue */
+            background-color: var(--duo-blue);
+            border-color: var(--duo-blue-dark);
+            color: var(--duo-white);
+        }
+        .btn-info:hover, .btn-info:focus, .btn-quiz-nav:hover, .btn-quiz-nav:focus {
+             background-color: var(--duo-blue-dark);
+             border-color: var(--duo-blue-dark);
+             color: var(--duo-white);
+        }
+        .btn-outline-secondary {
+             border-color: var(--duo-gray-medium);
+             color: var(--duo-gray-medium);
+             box-shadow: none; /* No shadow for outline */
+        }
+         .btn-outline-secondary:hover, .btn-outline-secondary:focus {
+             background-color: var(--duo-gray-hover); /* Use darker gray for hover */
+             border-color: var(--duo-gray-medium);
+             color: var(--duo-text);
+         }
+
+        /* General Typography & Elements */
+        h1, h2, h3, h4, h5, h6 {
+             font-weight: 700; /* Bolder headings */
+             color: var(--duo-text); 
+        }
+        .text-success {
+             color: var(--duo-green) !important;
+        }
+        .card {
+            border: 2px solid var(--bs-border-color);
+            border-radius: 1rem; /* More rounded cards */
+            box-shadow: none !important;
+        }
+        .alert {
+            border-radius: 0.75rem;
+            border-width: 2px;
+            font-weight: 600;
+        }
+        .alert-success {
+             background-color: var(--duo-white);
+             color: var(--duo-green);
+             border-color: var(--duo-green);
+        }
+        .alert-warning {
+            background-color: var(--duo-white);
+            color: var(--duo-orange);
+            border-color: var(--duo-orange);
+        }
+        .alert-danger {
+            /* Keep default red for danger */
+        }
+         .form-control, .input-group-text {
+            border-radius: 0.75rem;
+            border-color: var(--bs-border-color);
+         }
+         .form-control:focus {
+            border-color: var(--duo-blue);
+            box-shadow: 0 0 0 0.25rem rgba(var(--bs-info-rgb), 0.25);
+         }
+
+        /* Footer */
+        footer {
+             color: var(--duo-gray-medium);
+             border-top: 2px solid var(--bs-border-color);
+             background-color: var(--duo-white);
+             padding-top: 1rem;
+             padding-bottom: 1rem;
+        }
+
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="bi bi-tree-fill me-2"></i>PlantPal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'home' else '' }}" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'plants' or request.endpoint == 'plant_detail' else '' }}" href="{{ url_for('plants') }}">Plants</a>
+                    </li>
+                    <li class="nav-item ms-sm-3 mt-2 mt-sm-0">
+                        <a class="btn btn-info btn-sm {{ 'active disabled' if request.endpoint in ['quiz', 'results'] else '' }}" href="{{ url_for('quiz', question_num=1) }}">
+                           Start Quiz
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="container text-center mt-auto py-3 text-muted small border-top">
+        <p class="mb-0">&copy; <span id="currentYear"></span> PlantPal. Happy Planting!</p>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    {% block scripts %}{% endblock %}
+     <script>
+      // Add current year to footer using jQuery
+      $(document).ready(function() {
+        const currentYear = new Date().getFullYear();
+        $('#currentYear').text(currentYear); 
       });
     </script>
 </body>

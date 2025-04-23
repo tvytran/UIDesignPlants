@@ -5,45 +5,87 @@
 {% block content %}
     <div class="text-center">
         {# Progress Indicator #}
-        <div class="mb-4 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+        <div class="mb-3 text-muted text-uppercase small fw-semibold">
             Question {{ question_num }} / 4
         </div>
 
-        <h2 class="text-2xl font-bold text-duo-text mb-4">Where does the {{ question.plant.replace('-', ' ').title() }} belong?</h2>
-        <p class="text-gray-500 mb-8">Drag the plant to the correct lighting zone in the image below!</p>
+        <h2 class="h3 fw-bold text-body-emphasis mb-3">Where does the {{ question.plant.replace('-', ' ').title() }} belong?</h2>
+        <p class="text-muted mb-4">Drag the plant to the correct lighting zone in the image below!</p>
 
-        <div id="plant-box" class="mb-6 h-24 flex items-center justify-center">
-             <!-- Plant image gets placed here by script? Or maybe it starts here? -->
-             <!-- Let's style the placeholder/container -->
+        <div id="plant-box" class="mb-4 d-inline-block" style="height: 6rem;"> {# Adjust height as needed #}
              <img id="draggable-plant"
                  src="{{ url_for('static', filename='images/' + question.image) }}"
                  draggable="true"
                  data-plant="{{ question.plant }}"
                  alt="Draggable image of {{ question.plant.replace('-', ' ').title() }}"
-                 class="plant max-h-20 cursor-grab active:cursor-grabbing border-4 border-transparent hover:border-duo-blue rounded-lg transition-all duration-150">
+                 class="plant mh-100 rounded border border-secondary p-1 bg-light" 
+                 style="cursor: grab;">
+                 {# Basic styling, JS might add more on drag #}
         </div>
 
-        {# Apply consistent background/sizing/style to quiz drop zone AND add correct zone data #}
-        <div id="background" 
-             data-correct-zone="{{ question.correct_zone }}"
-             class="relative w-full max-w-xl mx-auto rounded-xl shadow-lg border border-gray-200 overflow-hidden" 
-             style="padding-top: 66.66%; background-image: url('{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}'); background-size: cover; background-position: center;">
-             {# Placeholder text removed, background image set #}
+        {# Container for the drop zone #}
+        <div id="background-container" 
+             class="quiz-dropzone-container position-relative w-100 mx-auto rounded border border-secondary bg-light overflow-hidden shadow-sm" 
+             style="max-width: 600px; padding-top: 66.66%;"> {# Aspect ratio container #}
+            
+             {# Actual Room Image (will be the drop target) #}
+             <img id="room-image-dropzone" 
+                  src="{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}" 
+                  alt="Room background for dropping plant"
+                  data-correct-zone="{{ question.correct_zone }}" 
+                  class="position-absolute top-0 start-0 w-100 h-100" 
+                  style="object-fit: cover; z-index: 1;"/> {# Fills container, behind dropped plant #}
+
+             {# Dropped plant will be appended here by JS, above the background img #}
         </div>
 
-        <div class="mt-8">
+        <div class="mt-4">
             <button id="submit-btn" 
                     disabled 
-                    class="w-full sm:w-auto bg-duo-green hover:bg-duo-green-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-none">
+                    class="btn btn-success btn-lg rounded-pill text-uppercase fw-bold shadow px-4">
                     Check Answer
             </button>
         </div>
         
-        <div id="result-message" class="mt-4 text-lg font-bold">&nbsp;</div>
+        {# Bootstrap Alert for feedback #}
+        <div id="result-message" class="alert mt-4 d-none" role="alert">
+            { R E S U L T }
+        </div>
     </div>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Custom styles for quiz elements if needed */
+    .quiz-dropzone {
+        transition: border-color 0.2s ease-in-out;
+    }
+    #draggable-plant.dragging {
+        opacity: 0.5;
+        cursor: grabbing;
+        transform: scale(1.1);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    }
+     /* Style for dropzone when plant is ready to submit */
+    .quiz-dropzone-container.ready-to-submit #room-image-dropzone {
+         border: 3px solid var(--duo-blue) !important; /* Use Bootstrap info blue */
+         box-shadow: 0 0 10px rgba(var(--bs-info-rgb), 0.5);
+    }
+    /* Style for dropzone on correct */
+     .quiz-dropzone-container.correct #room-image-dropzone {
+         border: 3px solid var(--duo-green) !important; /* Bootstrap success green */
+         box-shadow: 0 0 10px rgba(var(--bs-success-rgb), 0.5);
+     }
+     /* Style for dropzone on incorrect */
+      .quiz-dropzone-container.incorrect #room-image-dropzone {
+         border: 3px solid var(--bs-danger) !important; /* Bootstrap danger red */
+          box-shadow: 0 0 10px rgba(var(--bs-danger-rgb), 0.5);
+     }
+</style>
+{% endblock %}
+
+
 {% block scripts %}
-    <!-- Ensure script.js is correctly loaded -->
+    {# Ensure script.js (which will contain jQuery code) is loaded #}
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}

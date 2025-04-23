@@ -1,75 +1,74 @@
 {% extends "base.html" %}
 
-{% block title %}Explore Our Plants{% endblock %}
+{% block title %}Browse Plants{% endblock %}
 
 {% block content %}
-    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-        <div>
-            <h1 class="text-3xl font-bold text-plant-dark mb-1">Meet Your Green Companions</h1>
-            <p class="text-gray-600">Click on a plant to learn about its care.</p>
-        </div>
-        {# Search Input #}
-        <div class="relative w-full sm:w-auto">
-            <input type="text" id="plantSearchInput" placeholder="Search plants..." 
-                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-duo-green focus:border-transparent w-full sm:w-64">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                 <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-            </div>
-        </div>
+<div class="container py-5">
+    <h1 class="mb-4 text-success">Explore Our Plants</h1>
+
+    <!-- Search Bar -->
+    <div class="input-group mb-4 shadow-sm">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+        <input type="text" id="plantSearch" class="form-control border-start-0" placeholder="Search for plants by name..." aria-label="Search plants">
     </div>
-    
-    <div id="plantGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-        {# Plant cards loop - Add data attribute for searching #}
-        {% for plant_id, plant in plants.items() %}
-        <div class="plant-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out flex flex-col border border-gray-200" 
-             data-plant-name="{{ plant.name.lower() }}"> {# Added data-plant-name #}
-            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" class="block group flex-grow flex flex-col">
-                <div class="overflow-hidden h-48">
-                    <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out">
+
+    <!-- Plant Grid -->
+    <div id="plantList" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for plant in plants.values() %}
+        <div class="col plant-card-container"> {# Wrapper for easier JS targeting #}
+            <div class="card h-100 shadow-sm" style="overflow: hidden;">
+                 <img src="{{ url_for('static', filename='images/' + plant['image']) }}" class="card-img-top" alt="{{ plant['name'] }}" style="height: 15rem; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">
+                         <a href="{{ url_for('plant_detail', plant_id=plant['id']) }}" class="text-decoration-none text-dark stretched-link">{{ plant['name'] }}</a>
+                    </h5>
+                    <p class="card-text text-muted small">{{ plant['short_description'] }}</p>
+                    {# Optional: Add price or other quick info here #}
+                    {# <span class="mt-auto badge bg-light text-success fs-6 align-self-start">${{ plant['price'] }}</span> #}
                 </div>
-                <div class="p-4 flex-grow">
-                    <h2 class="text-xl font-bold text-duo-text group-hover:text-duo-green transition-colors duration-300">{{ plant.name }}</h2>
-                </div>
-            </a>
+                 {# Optional: Add a subtle footer #}
+                 {# <div class="card-footer bg-transparent border-top-0">
+                    <small class="text-muted">{{ plant['category'] }}</small>
+                 </div> #}
+            </div>
         </div>
         {% endfor %}
     </div>
-    {# Message for no search results #}
-    <div id="noResultsMessage" class="hidden text-center text-gray-500 mt-10">
-        <p>No plants found matching your search.</p>
+    <div id="noResults" class="alert alert-warning mt-4 d-none" role="alert">
+      No plants found matching your search.
     </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('plantSearchInput');
-        const plantGrid = document.getElementById('plantGrid');
-        const plantCards = plantGrid.querySelectorAll('.plant-card');
-        const noResultsMessage = document.getElementById('noResultsMessage');
-
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            let visibleCount = 0;
-
-            plantCards.forEach(card => {
-                const plantName = card.dataset.plantName;
-                if (plantName.includes(searchTerm)) {
-                    card.style.display = 'flex'; // Show card (use flex because card uses flex layout)
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none'; // Hide card
-                }
-            });
-
-            // Show/hide the 'no results' message
-            if (visibleCount === 0 && searchTerm !== '') {
-                noResultsMessage.style.display = 'block';
+$(document).ready(function(){
+    $('#plantSearch').on('keyup', function() {
+        var searchTerm = $(this).val().toLowerCase();
+        var found = false;
+        $('#plantList .plant-card-container').each(function() {
+            var plantName = $(this).find('.card-title a').text().toLowerCase();
+            if (plantName.includes(searchTerm)) {
+                $(this).show();
+                found = true;
             } else {
-                noResultsMessage.style.display = 'none';
+                $(this).hide();
             }
         });
+
+        // Show/hide 'no results' message
+        if (!found && searchTerm !== '') {
+            $('#noResults').removeClass('d-none');
+        } else {
+             $('#noResults').addClass('d-none');
+        }
+        // Ensure message hides if search is cleared
+        if(searchTerm === '') {
+             $('#noResults').addClass('d-none');
+             $('#plantList .plant-card-container').show(); // Show all again
+        }
     });
+});
 </script>
 {% endblock %}  

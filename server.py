@@ -35,8 +35,25 @@ def home():
 
 @app.route('/plants')
 def plants():
+    processed_plants = {}
+    for plant_id, plant_details in plants_data['plants'].items():
+        # Deep copy to avoid modifying the original data if it's used elsewhere
+        current_plant = plant_details.copy() 
+        # Add the id into the plant's dictionary
+        current_plant['id'] = plant_id 
+        # Create a short description (e.g., first 100 chars of description)
+        description = current_plant.get('description', '')
+        # Ensure facts is a list, default to empty list if missing
+        current_plant['facts'] = current_plant.get('facts', []) 
+        # Ensure scientific_name exists, default to empty string if missing
+        current_plant['scientific_name'] = current_plant.get('scientific_name', '') 
+        
+        current_plant['short_description'] = (description[:100] + '...') if len(description) > 100 else description
+        processed_plants[plant_id] = current_plant
+        
     record_user_activity('page_view', 'plants_list')
-    return render_template('plants.html', plants=plants_data['plants'])
+    # Pass the processed dictionary to the template
+    return render_template('plants.html', plants=processed_plants) 
 
 @app.route('/plants/<plant_id>')
 def plant_detail(plant_id):
@@ -62,9 +79,15 @@ def plant_detail(plant_id):
         # print(f"[DEBUG] Detail route: plant_id='{plant_id}', found correct_zone='{correct_zone}'")
         # --- END DEBUG PRINT ---
 
+        # Ensure the plant dictionary passed to detail also has necessary fields
+        plant_details = plants_data['plants'][plant_id].copy()
+        plant_details['id'] = plant_id # Ensure ID is present
+        plant_details['facts'] = plant_details.get('facts', []) # Ensure facts list exists
+        plant_details['scientific_name'] = plant_details.get('scientific_name', '') # Ensure scientific name exists
+
         # Pass all necessary data to the single detail template
         return render_template('plant-detail.html', 
-                               plant=plant, 
+                               plant=plant_details, # Pass the processed dict
                                plant_id=plant_id, 
                                correct_zone=correct_zone)
     else:

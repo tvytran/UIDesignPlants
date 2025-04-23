@@ -1,33 +1,24 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Welcome to PlantPal! 🌿{% endblock %}
+{% block title %}PlantPal - Welcome{% endblock %}
 
 {% block content %}
-    <div class="py-12 px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            {# Column 1: Text Content & CTA #}
-            <div class="text-center md:text-left">
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-duo-text mb-5 leading-tight">
-                    Learn Plant Care <span class="text-duo-green">the Fun Way!</span>
-                </h1>
-                <p class="text-lg text-gray-500 mb-10 max-w-xl mx-auto md:mx-0">
-                    Discover where your houseplants will thrive and test your green thumb with our quick quiz.
-                </p>
-                
-                <a href="{{ url_for('plants') }}" 
-                   class="inline-block bg-duo-green hover:bg-duo-green-dark text-white font-bold uppercase tracking-wider py-3 px-6 rounded-xl text-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
-                    Let's Grow!
-                </a>
-            </div>
-
-            {# Column 2: Visual #}
-            <div class="text-center">
-                {# Use the specified image #}
-                <img src="{{ url_for('static', filename='images/potted-hauseplant-set-collection-of-succulents-cacti-or-green-foliage-plants-growing-in-planters-or-flower-pots-illustration-in-flat-style-vector.jpg') }}" 
-                     alt="Collection of illustrated potted houseplants"
-                     class="w-full max-w-md mx-auto rounded-2xl shadow-lg object-cover">
-                     {# Adjust max-w-md and add aspect ratio/height if needed #}
-            </div> 
+<div class="row align-items-center g-5 py-5">
+    <div class="col-lg-7 text-center text-lg-start">
+        <h1 class="display-4 fw-bold lh-1 text-success mb-3">Welcome to PlantPal!</h1>
+        <p class="col-lg-10 fs-5 lead mb-4">
+            Discover the perfect plants for your space and learn how to care for them. Take our quick quiz to get personalized recommendations!
+        </p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a href="{{ url_for('plants') }}" class="btn btn-outline-secondary btn-lg px-4 me-md-2">Browse Plants</a>
+            <a href="{{ url_for('quiz', question_num=1) }}" class="btn btn-success btn-lg px-4">Take the Quiz</a>
         </div>
     </div>
+    <div class="col-10 col-sm-8 col-lg-5 mx-auto">
+        {# Updated image source #}
+        <img src="{{ url_for('static', filename='images/potted-hauseplant-set-collection-of-succulents-cacti-or-green-foliage-plants-growing-in-planters-or-flower-pots-illustration-in-flat-style-vector.jpg') }}" 
+             class="d-block mx-lg-auto img-fluid rounded-4 shadow-lg" 
+             alt="Collection of potted house plants" loading="lazy" width="700" height="500">
+    </div>
+</div>
 {% endblock %}

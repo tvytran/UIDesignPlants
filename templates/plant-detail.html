@@ -26,18 +26,32 @@
         <div id="plantTabContent">
             {# Overview Tab Panel #}
             <div class="" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center p-4">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start p-4">
                     <div class="plant-image-section text-center">
                         <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
                              class="w-full max-w-sm mx-auto rounded-2xl shadow-lg border border-gray-200 object-cover h-80 md:h-96">
                     </div>
-                    <div class="plant-overview-text">
-                         <h2 class="text-2xl font-bold text-duo-text mb-4">About {{ plant.name }}</h2>
-                         <p class="text-gray-600 leading-relaxed">
-                            {# Add general description if available in plants.json, otherwise a placeholder #}
-                            {{ plant.description if plant.description else "Learn more about this plant's lighting needs and fun facts in the other tabs!" }}
-                         </p>
-                         {# Add more care info here if available #}
+                    <div class="plant-overview-text space-y-6">
+                         <div>
+                            <h2 class="text-xl font-bold text-duo-text mb-2">Description</h2>
+                            <p class="text-gray-600 leading-relaxed">
+                                {{ plant.description if plant.description else "A lovely houseplant. More details coming soon!" }}
+                             </p>
+                         </div>
+                         <div>
+                            <h2 class="text-xl font-bold text-duo-text mb-2">Watering</h2>
+                            <p class="text-gray-600 leading-relaxed">
+                                {# Display watering info from JSON #}
+                                {{ plant.watering if plant.watering else "Watering information not available." }}
+                             </p>
+                         </div>
+                          <div>
+                            <h2 class="text-xl font-bold text-duo-text mb-2">Sunlight</h2>
+                            <p class="text-gray-600 leading-relaxed">
+                                {# Display sunlight info from JSON #}
+                                {{ plant.sunlight if plant.sunlight else "Sunlight requirements information not available." }}
+                            </p>
+                         </div>
                     </div>
                 </div>
             </div>

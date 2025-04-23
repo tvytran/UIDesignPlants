@@ -23,8 +23,9 @@
                  class="plant max-h-20 cursor-grab active:cursor-grabbing border-4 border-transparent hover:border-duo-blue rounded-lg transition-all duration-150">
         </div>
 
-        {# Apply consistent background/sizing/style to quiz drop zone #}
+        {# Apply consistent background/sizing/style to quiz drop zone AND add correct zone data #}
         <div id="background" 
+             data-correct-zone="{{ question.correct_zone }}"
              class="relative w-full max-w-xl mx-auto rounded-xl shadow-lg border border-gray-200 overflow-hidden" 
              style="padding-top: 66.66%; background-image: url('{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}'); background-size: cover; background-position: center;">
              {# Placeholder text removed, background image set #}

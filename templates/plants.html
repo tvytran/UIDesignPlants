@@ -3,22 +3,73 @@
 {% block title %}Explore Our Plants{% endblock %}
 
 {% block content %}
-    <h1 class="text-3xl font-bold text-plant-dark mb-2">Meet Your Green Companions</h1>
-    <p class="text-gray-600 mb-8">Click on a plant to learn about its care, lighting needs, and fun facts.</p>
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-plant-dark mb-1">Meet Your Green Companions</h1>
+            <p class="text-gray-600">Click on a plant to learn about its care.</p>
+        </div>
+        {# Search Input #}
+        <div class="relative w-full sm:w-auto">
+            <input type="text" id="plantSearchInput" placeholder="Search plants..." 
+                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-duo-green focus:border-transparent w-full sm:w-64">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+            </div>
+        </div>
+    </div>
     
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+    <div id="plantGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+        {# Plant cards loop - Add data attribute for searching #}
         {% for plant_id, plant in plants.items() %}
-        <div class="plant-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out flex flex-col">
-            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" class="block group">
-                <div class="overflow-hidden">
+        <div class="plant-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out flex flex-col border border-gray-200" 
+             data-plant-name="{{ plant.name.lower() }}"> {# Added data-plant-name #}
+            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" class="block group flex-grow flex flex-col">
+                <div class="overflow-hidden h-48">
                     <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
-                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out">
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out">
                 </div>
                 <div class="p-4 flex-grow">
-                    <h2 class="text-xl font-semibold text-plant-dark group-hover:text-plant-green transition-colors duration-300">{{ plant.name }}</h2>
+                    <h2 class="text-xl font-bold text-duo-text group-hover:text-duo-green transition-colors duration-300">{{ plant.name }}</h2>
                 </div>
             </a>
         </div>
         {% endfor %}
     </div>
+    {# Message for no search results #}
+    <div id="noResultsMessage" class="hidden text-center text-gray-500 mt-10">
+        <p>No plants found matching your search.</p>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('plantSearchInput');
+        const plantGrid = document.getElementById('plantGrid');
+        const plantCards = plantGrid.querySelectorAll('.plant-card');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            plantCards.forEach(card => {
+                const plantName = card.dataset.plantName;
+                if (plantName.includes(searchTerm)) {
+                    card.style.display = 'flex'; // Show card (use flex because card uses flex layout)
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none'; // Hide card
+                }
+            });
+
+            // Show/hide the 'no results' message
+            if (visibleCount === 0 && searchTerm !== '') {
+                noResultsMessage.style.display = 'block';
+            } else {
+                noResultsMessage.style.display = 'none';
+            }
+        });
+    });
+</script>
 {% endblock %}  

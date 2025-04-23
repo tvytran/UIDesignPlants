@@ -5,8 +5,25 @@
 {% block content %}
     <div class="text-center">
         <h1 class="text-3xl sm:text-4xl font-extrabold text-duo-text mb-4">Quiz Complete! 🎉</h1>
-        <p class="text-xl text-gray-600 mb-8">
-            You scored <strong class="text-2xl text-duo-green">{{ score }}</strong> out of <strong class="text-2xl text-duo-green">{{ total }}</strong> correct!
+        
+        {# Calculate score percentage #}
+        {% set score_percent = (score / total * 100) if total > 0 else 0 %}
+        
+        {# Add dynamic message based on score #}
+        <p class="text-xl text-gray-600 mb-2">
+            {% if score_percent == 100 %}
+                Wow! Perfect Score! 🥳 You're a plant expert!
+            {% elif score_percent >= 75 %}
+                Great job! You really know your plants! 👍
+            {% elif score_percent >= 50 %}
+                Nicely done! Keep learning! 🌱
+            {% else %}
+                Good effort! Review the answers below and try again! 💪
+            {% endif %}
+        </p>
+        
+        <p class="text-lg text-gray-500 mb-8">
+            You scored <strong class="text-2xl font-bold text-duo-green">{{ score }}</strong> out of <strong class="text-2xl font-bold text-duo-green">{{ total }}</strong> correct!
         </p>
 
         <div class="results-summary overflow-x-auto relative shadow-md rounded-lg border border-gray-200 mb-10">

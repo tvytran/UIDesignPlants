@@ -4,6 +4,9 @@
         "name": "Snake Plant",
         "image": "snake-plant.jpeg",
         "image_alt": "Snake Plant lighting diagram showing placement options in a living room",
+        "description": "Known for its striking upright leaves and air-purifying qualities, the Snake Plant is incredibly resilient and perfect for beginners.",
+        "watering": "Water sparingly every 2-4 weeks, allowing soil to dry out completely between waterings. Tolerant of neglect.",
+        "sunlight": "Prefers bright, indirect light but is highly adaptable to low light conditions.",
         "lighting_diagram": "snake-plant-lighting-diagram.jpg",
         "facts": [
           "They are great for air purification.",
@@ -15,6 +18,9 @@
         "name": "Peace Lily",
         "image": "peace lily.jpg",
         "image_alt": "Peace lily lighting diagram showing placement options in a living room",
+        "description": "Famous for its elegant white spathes (flowers) and glossy green leaves, the Peace Lily brings a sense of calm and tranquility.",
+        "watering": "Keep soil consistently moist but not waterlogged. Water when the top inch feels dry. Likes humidity.",
+        "sunlight": "Thrives in low to medium indirect light. Avoid direct sunlight which can scorch leaves.",
         "lighting_diagram": "peace-lily-lighting-diagram.jpg",
         "facts": [
           "a popular house plant known for its elegant white flowers and lush green leaves, symbolizing peace, purity, and tranquility",
@@ -25,6 +31,9 @@
         "name": "Spider Plant",
         "image": "spider-plant.jpg",
         "image_alt": "Spider plant lighting diagram showing placement options in a living room",
+        "description": "Characterized by its arching leaves and numerous 'spiderettes' (baby plants), this plant is easy to care for and propagate.",
+        "watering": "Water thoroughly when the top 1-2 inches of soil are dry. Reduce watering in winter.",
+        "sunlight": "Best in moderate to bright indirect light. Can tolerate lower light but may grow slower.",
         "lighting_diagram": "spider-plant-lighting-diagram.jpg",
         "facts": [
           "Spider plants are effective at removing common indoor pollutants like carbon monoxide.",
@@ -36,6 +45,9 @@
         "name": "Fiddle-leaf Fig",
         "image": "fiddle-leaf.jpg",
         "image_alt": "Fiddle Leaf lighting diagram showing placement options in a living room",
+        "description": "A trendy plant with large, violin-shaped leaves that makes a bold statement. Can be a bit demanding but rewards with stunning foliage.",
+        "watering": "Water when the top inch of soil is dry. Ensure good drainage and avoid overwatering. Likes consistency.",
+        "sunlight": "Needs bright, filtered light, often near an east-facing window. Avoid direct sun and drafts.",
         "lighting_diagram": "fiddle-leaf-fig-lighting-diagram.jpg",
         "facts": [
           "are popular houseplants known for their large, violin-shaped leaves and ability to purify air",

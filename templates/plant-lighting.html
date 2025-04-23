@@ -1,28 +1,54 @@
 {% extends "base.html" %}
 
-{% block title %}{{ plant.name }} - Lighting Guide{% endblock %}
+{% block title %}{{ plant.name }} - Ideal Lighting{% endblock %}
 
 {% block content %}
     <div class="text-center">
-        <h1 class="text-2xl sm:text-3xl font-bold text-duo-text mb-4">{{ plant.name }} - Lighting Needs</h1>
-        <p class="text-gray-500 mb-8">Where does this plant like to hang out?</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-duo-text mb-2">{{ plant.name }} - Ideal Lighting Spot</h1>
+        <p class="text-gray-500 mb-6 max-w-lg mx-auto">
+            Based on its needs (<strong>{{ correct_zone.replace('-', ' ').title() if correct_zone else 'Unknown Zone' }}</strong>), 
+            this is the ideal spot for your {{ plant.name }} in this room layout:
+        </p>
 
-        <div class="mb-8 inline-block">
-            <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="Lighting diagram for {{ plant.name }}" 
-                 class="max-w-md w-full mx-auto rounded-xl shadow-md border border-gray-200">
+        {# Define zone positions (approximated centers of quadrants for a 1:1 image) #}
+        {# bright-indirect: Top-Left #}
+        {# low-medium: Top-Right #}
+        {# moderate-indirect: Bottom-Left #}
+        {# bright-filtered: Bottom-Right #}
+        {% set zone_styles = {
+            'bright-indirect': 'top: 25%; left: 25%;',
+            'low-medium': 'top: 25%; left: 75%;',
+            'moderate-indirect': 'top: 75%; left: 25%;',
+            'bright-filtered': 'top: 75%; left: 75%;'
+        } %}
+        
+        {# Get the style for the correct zone, default to center if not found #}
+        {% set position_style = zone_styles.get(correct_zone, 'top: 50%; left: 50%;') %}
+        
+        {# Container for the background image - Use 3:2 aspect ratio #}
+        <div class="relative w-full max-w-xl mx-auto rounded-xl shadow-lg border border-gray-200 overflow-hidden" 
+             style="padding-top: 66.66%; background-image: url('{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}'); background-size: cover; background-position: center;"> 
+            {# Using the specified image path #}
+            {# padding-top: 66.66% creates 3:2 aspect ratio #}
+
+            {# Position the plant image if correct_zone is known #}
+            {% if correct_zone %}
+            <img src="{{ url_for('static', filename='images/' + plant.image) }}" 
+                 alt="{{ plant.name }} placed in its ideal lighting spot ({{ correct_zone.replace('-', ' ').title() }})"
+                 title="Ideal Spot: {{ correct_zone.replace('-', ' ').title() }}"
+                 class="absolute w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-full shadow-xl"
+                 style="{{ position_style }}">
+            {% else %}
+             {# Fallback message if zone is unknown #}
+             <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-600 font-semibold bg-white/80 p-2 rounded">Could not determine correct lighting zone.</p>
+            {% endif %}
         </div>
 
-        <div class="space-y-4">
-            <a href="{{ url_for('try_yourself') }}" 
-               class="inline-block bg-duo-yellow hover:bg-amber-500 text-duo-text font-bold py-2 px-5 rounded-full text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
-               Try it yourself (Coming Soon!)
+        <div class="mt-10">
+            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" 
+               class="inline-block text-gray-500 hover:text-duo-green font-semibold text-sm underline underline-offset-2">
+               &larr; Back to {{ plant.name }} Details
             </a>
-            <div>
-                <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" 
-                   class="inline-block text-gray-500 hover:text-duo-green font-semibold text-sm underline underline-offset-2">
-                   &larr; Back to {{ plant.name }}
-                </a>
-             </div>
-        </div>
+         </div>
     </div>
 {% endblock %}

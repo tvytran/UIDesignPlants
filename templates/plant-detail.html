@@ -25,7 +25,7 @@
         {# Tab Content #}
         <div id="plantTabContent">
             {# Overview Tab Panel #}
-            <div class="" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+            <div class="tab-pane active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start p-4">
                     <div class="plant-image-section text-center">
                         <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
@@ -33,22 +33,20 @@
                     </div>
                     <div class="plant-overview-text space-y-6">
                          <div>
-                            <h2 class="text-xl font-bold text-duo-text mb-2">Description</h2>
+                            <h2 class="text-xl font-bold text-duo-text mb-2 flex items-center"><span class="mr-2 text-lg">📖</span> Description</h2>
                             <p class="text-gray-600 leading-relaxed">
                                 {{ plant.description if plant.description else "A lovely houseplant. More details coming soon!" }}
                              </p>
                          </div>
                          <div>
-                            <h2 class="text-xl font-bold text-duo-text mb-2">Watering</h2>
+                            <h2 class="text-xl font-bold text-duo-text mb-2 flex items-center"><span class="mr-2 text-lg">💧</span> Watering</h2>
                             <p class="text-gray-600 leading-relaxed">
-                                {# Display watering info from JSON #}
                                 {{ plant.watering if plant.watering else "Watering information not available." }}
                              </p>
                          </div>
                           <div>
-                            <h2 class="text-xl font-bold text-duo-text mb-2">Sunlight</h2>
+                            <h2 class="text-xl font-bold text-duo-text mb-2 flex items-center"><span class="mr-2 text-lg">☀️</span> Sunlight</h2>
                             <p class="text-gray-600 leading-relaxed">
-                                {# Display sunlight info from JSON #}
                                 {{ plant.sunlight if plant.sunlight else "Sunlight requirements information not available." }}
                             </p>
                          </div>
@@ -57,7 +55,7 @@
             </div>
 
             {# Lighting Tab Panel (Initially Hidden) #}
-            <div class="hidden p-4 rounded-lg bg-gray-50" id="lighting" role="tabpanel" aria-labelledby="lighting-tab">
+            <div class="hidden tab-pane p-4 rounded-lg bg-gray-50" id="lighting" role="tabpanel" aria-labelledby="lighting-tab">
                 <h2 class="text-2xl font-bold text-duo-text mb-2 text-center">Ideal Lighting Spot</h2>
                 <p class="text-gray-500 mb-6 max-w-lg mx-auto text-center">
                     Based on its needs (<strong>{{ correct_zone.replace('-', ' ').title() if correct_zone else 'Unknown Zone' }}</strong>), 
@@ -92,19 +90,20 @@
                 </div>
             </div>
 
-            {# Facts Tab Panel (Initially Hidden) #}
-            <div class="hidden p-4 rounded-lg bg-gray-50" id="facts" role="tabpanel" aria-labelledby="facts-tab">
-                 <div class="max-w-2xl mx-auto">
-                    <h2 class="text-2xl font-bold text-duo-text mb-4 text-center">Fun Facts! ✨</h2>
-                     <div class="text-left bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            {# Facts Tab Panel (Initially Hidden) - Changed to Card Format #}
+            <div class="hidden tab-pane p-4 rounded-lg bg-gray-50" id="facts" role="tabpanel" aria-labelledby="facts-tab">
+                 <div class="max-w-3xl mx-auto">
+                    <h2 class="text-2xl font-bold text-duo-text mb-6 text-center">Fun Facts! ✨</h2>
+                     <div class="space-y-4">
                         {% if plant.facts %}
-                        <ul class="list-disc list-outside pl-5 space-y-3 text-duo-text">
                             {% for fact in plant.facts %}
-                            <li class="leading-relaxed">{{ fact }}</li>
+                            <div class="fact-card bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex items-start space-x-3">
+                                <span class="text-duo-green text-xl mt-1">🌱</span>
+                                <p class="text-duo-text leading-relaxed">{{ fact }}</p>
+                            </div>
                             {% endfor %}
-                        </ul>
                         {% else %}
-                        <p class="text-gray-500 italic">No fun facts available for this plant yet.</p>
+                            <p class="text-center text-gray-500 italic">No fun facts available for this plant yet.</p>
                         {% endif %}
                     </div>
                 </div>
@@ -124,45 +123,65 @@
 
 {% block scripts %}
 <script>
-    // Basic Tab Functionality
+    // Basic Tab Functionality with Transitions
     document.addEventListener('DOMContentLoaded', () => {
         const tabElements = document.querySelectorAll('[data-tabs-target]');
         const tabContent = document.getElementById('plantTabContent');
 
-        // Set initial active tab styles
+        // Function to handle tab switching
+        function switchTab(targetTabButton) {
+             const targetSelector = targetTabButton.getAttribute('data-tabs-target');
+             const targetPanel = document.querySelector(targetSelector);
+
+             // Hide all panels with transition
+             tabContent.querySelectorAll('.tab-pane').forEach(panel => {
+                 if (panel !== targetPanel) {
+                     panel.classList.add('opacity-0', 'invisible');
+                     setTimeout(() => { panel.classList.add('hidden'); }, 150); // Hide after transition (duration-150)
+                 }
+             });
+
+             // Deactivate all tabs
+             document.querySelectorAll('#plantTab [role="tab"]').forEach(t => {
+                 t.setAttribute('aria-selected', 'false');
+                 t.classList.remove('text-duo-blue', 'border-duo-blue');
+                 t.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+             });
+
+             // Show target panel with transition
+             if (targetPanel) {
+                 targetPanel.classList.remove('hidden');
+                 // Use a tiny timeout to allow 'hidden' removal to render before starting transition
+                 setTimeout(() => {
+                     targetPanel.classList.remove('opacity-0', 'invisible');
+                 }, 10); 
+             }
+
+             // Activate clicked tab
+             targetTabButton.setAttribute('aria-selected', 'true');
+             targetTabButton.classList.add('text-duo-blue', 'border-duo-blue');
+             targetTabButton.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+        }
+
+        // Set initial active tab styles and prepare panes
+        tabContent.querySelectorAll('.tab-pane').forEach(panel => {
+            panel.classList.add('transition-opacity', 'duration-150', 'ease-in-out'); // Add base transition classes
+            if (!panel.getAttribute('aria-labelledby').includes(document.querySelector('#plantTab [aria-selected="true"]').id)) {
+                panel.classList.add('opacity-0', 'invisible', 'hidden');
+            } else {
+                panel.classList.remove('opacity-0', 'invisible', 'hidden'); // Ensure initial active pane is visible
+            }
+        });
         const initialActiveTab = document.querySelector('#plantTab [aria-selected="true"]');
         if (initialActiveTab) {
              initialActiveTab.classList.add('text-duo-blue', 'border-duo-blue');
              initialActiveTab.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
         }
 
+        // Add click listeners
         tabElements.forEach(tab => {
             tab.addEventListener('click', event => {
-                const targetSelector = event.target.getAttribute('data-tabs-target');
-                const targetPanel = document.querySelector(targetSelector);
-
-                // Hide all panels
-                tabContent.querySelectorAll('[role="tabpanel"]').forEach(panel => {
-                    panel.classList.add('hidden');
-                });
-
-                // Deactivate all tabs
-                 document.querySelectorAll('#plantTab [role="tab"]').forEach(t => {
-                    t.setAttribute('aria-selected', 'false');
-                    t.classList.remove('text-duo-blue', 'border-duo-blue');
-                    t.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
-                 });
-
-                // Show target panel
-                if (targetPanel) {
-                    targetPanel.classList.remove('hidden');
-                }
-
-                // Activate clicked tab
-                event.target.setAttribute('aria-selected', 'true');
-                event.target.classList.add('text-duo-blue', 'border-duo-blue');
-                event.target.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
-                
+                switchTab(event.target);
             });
         });
     });

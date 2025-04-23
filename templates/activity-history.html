@@ -3,34 +3,40 @@
 {% block title %}Your Learning Activity{% endblock %}
 
 {% block content %}
-    <h1>Your Learning Activity</h1>
+    <h1 class="text-2xl sm:text-3xl font-bold text-duo-text mb-6">Your Learning Journey 🗺️</h1>
     
     {% if activities %}
-        <div class="activity-list">
-            <table>
-                <thead>
+        <div class="activity-list overflow-x-auto relative shadow-md rounded-lg border border-gray-200">
+            <table class="w-full text-sm text-left text-gray-600">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                     <tr>
-                        <th>Time</th>
-                        <th>Activity</th>
-                        <th>Details</th>
+                        <th scope="col" class="py-3 px-6">When</th>
+                        <th scope="col" class="py-3 px-6">What You Did</th>
+                        <th scope="col" class="py-3 px-6">Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for activity in activities %}
-                    <tr>
-                        <td>{{ activity.timestamp }}</td>
-                        <td>{{ activity.type }}</td>
-                        <td>{{ activity.details }}</td>
+                    <tr class="bg-white border-b hover:bg-green-50">
+                        <td class="py-4 px-6 whitespace-nowrap">{{ activity.timestamp }}</td>
+                        <td class="py-4 px-6 font-medium text-gray-800">{{ activity.type.replace('_', ' ').title() }}</td>
+                        <td class="py-4 px-6">{{ activity.details }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     {% else %}
-        <p>No activities recorded yet. Start exploring plants!</p>
+        <div class="text-center bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+            <p class="font-semibold text-yellow-800">Looks like you haven't explored yet!</p>
+            <p class="text-yellow-700 mt-2">Start learning about plants or take the quiz to see your activity here.</p>
+        </div>
     {% endif %}
     
-    <div class="navigation-buttons">
-        <a href="{{ url_for('plants') }}" class="nav-button">Back to Plants</a>
+    <div class="mt-10 text-center">
+        <a href="{{ url_for('plants') }}" 
+           class="inline-block text-gray-500 hover:text-duo-green font-semibold text-sm underline underline-offset-2">
+           &larr; Back to Learning
+        </a>
     </div>
 {% endblock %}

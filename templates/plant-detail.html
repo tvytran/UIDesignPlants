@@ -1,24 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}{{ plant.name }} - Care and Information{% endblock %}
+{% block title %}{{ plant.name }} - PlantPal{% endblock %}
 
 {% block content %}
-    <h1>{{ plant.name }}</h1>
-    
-    <div class="plant-detail">
-        <div class="plant-image-container">
-            <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" class="plant-detail-image">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+        
+        <div class="plant-image-section text-center">
+            <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
+                 class="w-full max-w-sm mx-auto rounded-2xl shadow-lg border border-gray-200 object-cover h-80 md:h-96">
         </div>
         
-        <div class="plant-info">
-            <a href="{{ url_for('plant_lighting', plant_id=plant_id) }}" class="info-button">Lighting placement</a>
+        <div class="plant-info-section mt-6 md:mt-0">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-duo-text mb-6">{{ plant.name }}</h1>
             
-            <a href="{{ url_for('plant_facts', plant_id=plant_id) }}" class="info-button">Fun facts</a>
+            <div class="space-y-4">
+                <a href="{{ url_for('plant_lighting', plant_id=plant_id) }}" 
+                   class="flex items-center justify-center w-full bg-duo-blue hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
+                    <span>💡 Lighting Guide</span>
+                </a>
+                
+                <a href="{{ url_for('plant_facts', plant_id=plant_id) }}" 
+                   class="flex items-center justify-center w-full bg-duo-yellow hover:bg-amber-500 text-duo-text font-bold py-3 px-6 rounded-xl text-lg shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
+                    <span>✨ Fun Facts</span>
+                </a>
+            </div>
+
+             <div class="mt-10 text-center">
+                <a href="{{ url_for('plants') }}" 
+                   class="inline-block text-gray-500 hover:text-duo-green font-semibold text-sm underline underline-offset-2">
+                    &larr; Back to All Plants
+                </a>
+            </div>
         </div>
-    </div>
-    
-    <div class="navigation-buttons">
-        <a href="{{ url_for('plants') }}" class="nav-button">return</a>
-        <!-- Next button logic would need to be added here -->
+
     </div>
 {% endblock %}

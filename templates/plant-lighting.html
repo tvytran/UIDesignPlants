@@ -1,23 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}{{ plant.name }} - Lighting Placement{% endblock %}
+{% block title %}{{ plant.name }} - Lighting Guide{% endblock %}
 
 {% block content %}
-<div class="plant-lighting-container">
-    <h1>{{ plant.name }}</h1>
-    
-    <div class="lighting-modal">
-        <div class="modal-header">
-            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" class="close-button">&times;</a>
+    <div class="text-center">
+        <h1 class="text-2xl sm:text-3xl font-bold text-duo-text mb-4">{{ plant.name }} - Lighting Needs</h1>
+        <p class="text-gray-500 mb-8">Where does this plant like to hang out?</p>
+
+        <div class="mb-8 inline-block">
+            <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="Lighting diagram for {{ plant.name }}" 
+                 class="max-w-md w-full mx-auto rounded-xl shadow-md border border-gray-200">
         </div>
-        
-        <div class="lighting-content">
-            <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{plant.image_alt}}" class="lighting-diagram">
-            
-            <a href="{{ url_for('try_yourself') }}" class="try-button">Try it yourself</a>
+
+        <div class="space-y-4">
+            <a href="{{ url_for('try_yourself') }}" 
+               class="inline-block bg-duo-yellow hover:bg-amber-500 text-duo-text font-bold py-2 px-5 rounded-full text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
+               Try it yourself (Coming Soon!)
+            </a>
+            <div>
+                <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" 
+                   class="inline-block text-gray-500 hover:text-duo-green font-semibold text-sm underline underline-offset-2">
+                   &larr; Back to {{ plant.name }}
+                </a>
+             </div>
         </div>
-        
-        
     </div>
-</div>
 {% endblock %}

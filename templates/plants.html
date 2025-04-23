@@ -1,17 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}4 Common House Plants{% endblock %}
+{% block title %}Explore Our Plants{% endblock %}
 
 {% block content %}
-    <h1>4 Common House Plants</h1>
-    <p class="instructions">Click on a plant to learn more about it and its lighting</p>
+    <h1 class="text-3xl font-bold text-plant-dark mb-2">Meet Your Green Companions</h1>
+    <p class="text-gray-600 mb-8">Click on a plant to learn about its care, lighting needs, and fun facts.</p>
     
-    <div class="plants-grid">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
         {% for plant_id, plant in plants.items() %}
-        <div class="plant-card">
-            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}">
-                <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}">
-                <h2>{{ plant.name }}</h2>
+        <div class="plant-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out flex flex-col">
+            <a href="{{ url_for('plant_detail', plant_id=plant_id) }}" class="block group">
+                <div class="overflow-hidden">
+                    <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
+                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out">
+                </div>
+                <div class="p-4 flex-grow">
+                    <h2 class="text-xl font-semibold text-plant-dark group-hover:text-plant-green transition-colors duration-300">{{ plant.name }}</h2>
+                </div>
             </a>
         </div>
         {% endfor %}

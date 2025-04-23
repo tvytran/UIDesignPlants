@@ -3,31 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Houseplants and Proper Lighting{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{% block title %}PlantPal - Your Plant Friend{% endblock %}</title>
+    <!-- Using Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['Nunito', 'sans-serif'], // Use Nunito as the primary font
+              },
+              colors: {
+                'duo-green': '#58CC02',      
+                'duo-green-dark': '#46A301',
+                'duo-blue': '#1CB0F6',        // A common accent blue
+                'duo-yellow': '#FFC800',
+                'duo-light-bg': '#F7F7F7',    // Light background
+                'duo-text': '#4B4B4B',        // Darker text for contrast
+              }
+            }
+          }
+        }
+      </script>
     {% block extra_css %}{% endblock %}
+    <!-- Google Fonts - Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Nunito globally */
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+        /* Add a subtle pattern like Duolingo's background? Optional */
+        /* body { background-image: url(...); } */
+    </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <nav class="main-nav">
-                <div class="logo">
-                    <a href="{{ url_for('home') }}">Plant Care</a>
+<body class="bg-duo-light-bg text-duo-text font-sans">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <header class="mb-10">
+            <nav class="flex items-center justify-between">
+                <div class="logo text-3xl font-extrabold text-duo-green">
+                    <a href="{{ url_for('home') }}">🌿 PlantPal</a>
                 </div>
-                <ul class="nav-links">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('plants') }}">Learn</a></li>
-                    <a href="{{ url_for('quiz', question_num=1) }}">Quiz</a>
-                    <li><a href="#contact">Contact</a></li>
+                <ul class="nav-links flex space-x-3 sm:space-x-4 items-center">
+                    <li><a href="{{ url_for('home') }}" class="text-gray-600 hover:text-duo-green font-bold px-3 py-2 rounded-lg text-sm uppercase tracking-wider">Home</a></li>
+                    <li><a href="{{ url_for('plants') }}" class="text-gray-600 hover:text-duo-green font-bold px-3 py-2 rounded-lg text-sm uppercase tracking-wider">Learn</a></li>
+                    <li><a href="{{ url_for('quiz', question_num=1) }}" 
+                           class="bg-duo-blue hover:bg-sky-600 text-white font-bold py-2 px-5 rounded-full text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition duration-200 transform hover:-translate-y-0.5">
+                           Quiz Time!</a></li>
                 </ul>
             </nav>
         </header>
         
-        <div class="content">
+        <main class="content bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-200">
             {% block content %}{% endblock %}
-        </div>
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500 text-sm">
+            <p>&copy; {{ current_year }} PlantPal. Happy Planting!</p>
+        </footer>
     </div>
     
     {% block scripts %}{% endblock %}
+    <script>
+      // Add current year to footer
+      document.addEventListener('DOMContentLoaded', (event) => {
+        const currentYear = new Date().getFullYear();
+        const footer = document.querySelector('footer p');
+        if (footer) { 
+          footer.innerHTML = `&copy; ${currentYear} PlantPal. Happy Planting!`;
+        }
+      });
+    </script>
 </body>
 </html>

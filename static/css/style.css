@@ -130,8 +130,9 @@ h1 {
 }
 
 .plant-card img {
-    max-width: 100%;
-    height: auto;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
     border-radius: 5px;
 }
 
@@ -407,3 +408,114 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
+
+
+
+/* Quiz Section */ 
+.quiz-background {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    margin: 0 auto;
+    background-image: url('../images/lighting guide.jpg'); /* or your local upload */
+    background-size: cover;
+    background-position: center;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  }
+  
+  /* Drop Zones - 4 corners */
+.drop-zone {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 2px dashed rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    pointer-events: all;
+  }
+  
+  .drop-zone.dropped {
+    background-color: rgba(173, 255, 168, 0.5); /* green tint when filled */
+  }
+  
+  /* Dragged label inside drop zone */
+  .placed-plant {
+    color: #333;
+    font-weight: bold;
+    background-color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Plants section */
+  .plants {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .plant {
+    width: 100px;
+    height: auto;
+    cursor: grab;
+    transition: transform 0.2s;
+  }
+  
+  .plant:active {
+    transform: scale(1.05);
+  }
+  
+  /* Submit button and result */
+  #submit-btn {
+    display: block;
+    margin: 30px auto 10px;
+    padding: 12px 24px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #submit-btn:hover {
+    background-color: #45a049;
+  }
+
+  .quiz-btn {
+    display: inline-block;
+    background-color: white; 
+    color: grey;
+    padding: 12px 24px;
+    font-size: 16px;
+    margin: 10px 8px 0 0;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .quiz-btn:hover {
+    background-color: #eaeaea;
+    transform: translateY(-1px);
+  }
+  
+  .quiz-btn:active {
+    background-color: #659c78;
+    transform: translateY(1px);
+  }
+  

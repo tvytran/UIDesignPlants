@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Place {{ question.plant }}{% endblock %}
+
+{% block content %}
+<h2>Drag the {{ question.plant.replace('-', ' ') }} into the correct lighting area</h2>
+
+<div class="quiz-background" id="background">
+  <!-- The image will be used as the background — visually divided by coordinates -->
+</div>
+
+<div id="plant-box">
+  <img id="draggable-plant"
+       src="{{ url_for('static', filename='images/' + question.image) }}"
+       draggable="true"
+       data-plant="{{ question.plant }}"
+       class="plant">
+</div>
+
+<button id="submit-btn" disabled>Submit Placement</button>
+<div id="result-message"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

@@ -16,8 +16,8 @@
                 </div>
                 <ul class="nav-links">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="#learn">Learn</a></li>
-                    <li><a href="#quiz">Quiz</a></li>
+                    <li><a href="{{ url_for('plants') }}">Learn</a></li>
+                    <a href="{{ url_for('quiz', question_num=1) }}">Quiz</a>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>

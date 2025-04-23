@@ -2,7 +2,7 @@
     "plants": {
       "snake-plant": {
         "name": "Snake Plant",
-        "image": "snake-plant.jpg",
+        "image": "snake-plant.jpeg",
         "image_alt": "Snake Plant lighting diagram showing placement options in a living room",
         "lighting_diagram": "snake-plant-lighting-diagram.jpg",
         "facts": [
@@ -13,7 +13,7 @@
       },
       "peace-lily": {
         "name": "Peace Lily",
-        "image": "peace-lily.jpg",
+        "image": "peace lily.jpg",
         "image_alt": "Peace lily lighting diagram showing placement options in a living room",
         "lighting_diagram": "peace-lily-lighting-diagram.jpg",
         "facts": [
@@ -21,11 +21,11 @@
           "popular choice for gift-giving during times of mourning, as well as for decorating homes and office spaces"
         ]
       },
-      "spider-lily": {
-        "name": "Spider Lily",
-        "image": "spider-lily.jpg",
-        "image_alt": "Spider lily lighting diagram showing placement options in a living room",
-        "lighting_diagram": "spider-lily-lighting-diagram.jpg",
+      "spider plant": {
+        "name": "Spider Plant",
+        "image": "spider-plant.jpg",
+        "image_alt": "Spider plant lighting diagram showing placement options in a living room",
+        "lighting_diagram": "spider-plant-lighting-diagram.jpg",
         "facts": [
           "Spider plants are effective at removing common indoor pollutants like carbon monoxide.",
           "Spider plants are known for being low-maintenance and can tolerate some neglect.",
@@ -34,7 +34,7 @@
       },
       "fiddle-leaf-fig": {
         "name": "Fiddle-leaf Fig",
-        "image": "fiddle-leaf-fig.jpg",
+        "image": "fiddle-leaf.jpg",
         "image_alt": "Fiddle Leaf lighting diagram showing placement options in a living room",
         "lighting_diagram": "fiddle-leaf-fig-lighting-diagram.jpg",
         "facts": [

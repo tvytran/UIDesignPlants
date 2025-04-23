@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Results{% endblock %}
+
+{% block content %}
+<h1> Quiz Results</h1>
+<p>You got <strong>{{ score }}</strong> out of <strong>{{ total }}</strong> correct.</p>
+
+<table class="table table-bordered mt-4">
+  <thead class="table-light">
+    <tr>
+      <th>Plant</th>
+      <th>Your Placement</th>
+      <th>Correct Zone</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for placement in placements %}
+    <tr>
+      <td>{{ placement.plant.replace('-', ' ').title() }}</td>
+      <td>{{ placement.zone.replace('-', ' ').title() }}</td>
+      <td>{{ placement.correct_zone.replace('-', ' ').title() }}</td>
+      <td>
+        {% if placement.correct %}
+            Correct
+        {% else %}
+            Incorrect
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{{ url_for('reset_quiz') }}" class="quiz-btn">Try Again</a>
+<a href="{{ url_for('home') }}" class="quiz-btn">Return Home</a>
+
+{% endblock %}

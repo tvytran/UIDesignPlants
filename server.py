@@ -60,6 +60,28 @@ def plant_detail(plant_id):
     if plant_id in plants_data['plants']:
         plant = plants_data['plants'][plant_id]
         
+        # Get list of all plant IDs for navigation
+        plant_ids = list(plants_data['plants'].keys())
+        current_index = plant_ids.index(plant_id)
+        
+        # Get previous and next plant IDs
+        prev_plant = None
+        next_plant = None
+        
+        if current_index > 0:
+            prev_plant_id = plant_ids[current_index - 1]
+            prev_plant = {
+                'id': prev_plant_id,
+                'name': plants_data['plants'][prev_plant_id]['name']
+            }
+            
+        if current_index < len(plant_ids) - 1:
+            next_plant_id = plant_ids[current_index + 1]
+            next_plant = {
+                'id': next_plant_id,
+                'name': plants_data['plants'][next_plant_id]['name']
+            }
+        
         # Load quiz data to find the correct zone for this plant
         correct_zone = None
         try:
@@ -75,10 +97,6 @@ def plant_detail(plant_id):
 
         record_user_activity('plant_selection', plant_id)
         
-        # --- DEBUG PRINT --- 
-        # print(f"[DEBUG] Detail route: plant_id='{plant_id}', found correct_zone='{correct_zone}'")
-        # --- END DEBUG PRINT ---
-
         # Ensure the plant dictionary passed to detail also has necessary fields
         plant_details = plants_data['plants'][plant_id].copy()
         plant_details['id'] = plant_id # Ensure ID is present
@@ -87,9 +105,11 @@ def plant_detail(plant_id):
 
         # Pass all necessary data to the single detail template
         return render_template('plant-detail.html', 
-                               plant=plant_details, # Pass the processed dict
+                               plant=plant_details,
                                plant_id=plant_id, 
-                               correct_zone=correct_zone)
+                               correct_zone=correct_zone,
+                               prev_plant=prev_plant,
+                               next_plant=next_plant)
     else:
         return "Plant not found", 404
 

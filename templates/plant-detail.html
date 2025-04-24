@@ -127,9 +127,27 @@
 
     <!-- Back Link -->
     <div class="mt-4 text-center">
-        <a href="{{ url_for('plants') }}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left me-2"></i>Back to All Plants
-        </a>
+        <div class="row justify-content-center align-items-center g-3">
+            <div class="col-auto">
+                {% if prev_plant %}
+                <a href="{{ url_for('plant_detail', plant_id=prev_plant.id) }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Previous Plant
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-auto">
+                <a href="{{ url_for('plants') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-grid me-2"></i>All Plants
+                </a>
+            </div>
+            <div class="col-auto">
+                {% if next_plant %}
+                <a href="{{ url_for('plant_detail', plant_id=next_plant.id) }}" class="btn btn-outline-secondary">
+                    Next Plant<i class="bi bi-arrow-right ms-2"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

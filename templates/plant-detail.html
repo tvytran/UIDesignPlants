@@ -55,18 +55,52 @@
              <h3 class="mb-3">Ideal Lighting Spot</h3>
               <p class="text-muted mb-4">
                     Based on its needs (<strong>{{ correct_zone.replace('-', ' ').title() if correct_zone else 'Unknown Zone' }}</strong>), 
-                    find a similar spot for your {{ plant.name }} in your home.
+                    here's where you should place your {{ plant.name }} in your home.
                 </p>
-              <div class="text-center">
-                 {# Simplified: Show the image and text, removed complex positioning #}
-                 <img src="{{ url_for('static', filename='images/' + plant.image) }}" 
-                      alt="{{ plant.name }} in suggested lighting" 
-                      class="img-thumbnail mb-3" style="max-width: 200px;">
-                 <p>Place in an area with <strong>{{ correct_zone.replace('-', ' ').title() if correct_zone else 'appropriate' }}</strong> light.</p>
-                 {% if not correct_zone %}
-                     <p class="text-danger small">Could not determine exact lighting zone.</p>
-                 {% endif %}
-             </div>
+              <div class="row align-items-center g-4">
+                  <div class="col-md-8">
+                      <div class="position-relative">
+                          <img src="{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}" 
+                               alt="Room lighting guide" 
+                               class="img-fluid rounded shadow-sm">
+                          {% if correct_zone %}
+                              <div class="position-absolute" style="
+                                  {% if 'bright' in correct_zone %}
+                                      left: 20%; top: 50%;  {# Near the large windows #}
+                                  {% elif 'medium' in correct_zone %}
+                                      left: 50%; top: 50%;  {# Middle of the room #}
+                                  {% else %}
+                                      left: 80%; top: 50%;  {# Far from windows, near the wall #}
+                                  {% endif %}
+                                  transform: translate(-50%, -50%); z-index: 2;">
+                                  <img src="{{ url_for('static', filename='images/' + plant.image) }}" 
+                                       alt="{{ plant.name }}" 
+                                       class="rounded-circle border border-4 border-success"
+                                       style="width: 100px; height: 100px; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                              </div>
+                          {% endif %}
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="card">
+                          <div class="card-body">
+                              <h5 class="card-title">Lighting Tips</h5>
+                              <ul class="list-unstyled mb-0">
+                                  {% if 'bright' in correct_zone %}
+                                      <li><i class="bi bi-sun-fill text-warning me-2"></i>Place near windows with direct sunlight</li>
+                                      <li><i class="bi bi-info-circle text-primary me-2"></i>South or west-facing windows are ideal</li>
+                                  {% elif 'medium' in correct_zone %}
+                                      <li><i class="bi bi-sun text-warning me-2"></i>Place in bright, indirect light</li>
+                                      <li><i class="bi bi-info-circle text-primary me-2"></i>Few feet away from windows or near east-facing windows</li>
+                                  {% else %}
+                                      <li><i class="bi bi-cloud-sun text-warning me-2"></i>Place in low light areas</li>
+                                      <li><i class="bi bi-info-circle text-primary me-2"></i>North-facing windows or interior spaces</li>
+                                  {% endif %}
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+              </div>
         </div>
 
         <!-- Facts Tab -->

@@ -188,7 +188,7 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-
+    {% block show_navbar %}
     <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom shadow-sm mb-4">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('home') }}">
@@ -214,6 +214,7 @@
             </div>
         </div>
     </nav>
+    {% endblock %}
 
     <main class="container py-4">
         {% block content %}{% endblock %}

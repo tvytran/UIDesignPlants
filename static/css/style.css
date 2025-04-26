@@ -519,3 +519,38 @@ h1 {
     transform: translateY(1px);
   }
   
+/* Quiz-specific styles */
+.quiz-dropzone {
+    transition: border-color 0.2s ease-in-out;
+}
+
+#draggable-plant.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    transform: scale(1.1);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+}
+
+/* Style for dropzone when plant is ready to submit */
+.quiz-dropzone-container.ready-to-submit #room-image-dropzone {
+    border: 3px solid var(--duo-blue) !important;
+    box-shadow: 0 0 10px rgba(var(--bs-info-rgb), 0.5);
+}
+
+/* Style for dropzone on correct */
+.quiz-dropzone-container.correct #room-image-dropzone {
+    border: 3px solid var(--duo-green) !important;
+    box-shadow: 0 0 10px rgba(var(--bs-success-rgb), 0.5);
+}
+
+/* Style for dropzone on incorrect */
+.quiz-dropzone-container.incorrect #room-image-dropzone {
+    border: 3px solid var(--bs-danger) !important;
+    box-shadow: 0 0 10px rgba(var(--bs-danger-rgb), 0.5);
+}
+
+#timer {
+    font-family: monospace;
+    font-size: 1.1em;
+}
+  

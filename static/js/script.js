@@ -19,6 +19,18 @@ $(document).ready(function() {
     let placement = null; // Store the user's placement { plant, zone }
     let isSubmitting = false; // Flag to prevent double submissions
 
+    // Timer functionality
+    let startTime = Date.now();
+    let timerInterval;
+
+    function updateTimer() {
+        const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        $('#timer').text(`Time: ${elapsedTime}s`);
+    }
+
+    // Start the timer when the page loads
+    timerInterval = setInterval(updateTimer, 1000);
+
     // Make plant draggable (using HTML5 draggable attribute)
     // Add visual feedback on drag start/end
     $plant.on('dragstart', function(e) {
@@ -100,6 +112,7 @@ $(document).ready(function() {
         $submitBtn.prop('disabled', true); 
         
         const isCorrect = placement.zone === correctZone;
+        const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
         // Add/remove classes on the CONTAINER for border effect
         $dropContainer.removeClass('ready-to-submit').addClass(isCorrect ? 'correct' : 'incorrect');
@@ -117,11 +130,23 @@ $(document).ready(function() {
                 url: '/submit-plant',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(placement),
+                data: JSON.stringify({
+                    plant: placement.plant,
+                    zone: placement.zone,
+                    time_spent: timeSpent
+                }),
                 dataType: 'json',
                 success: function(data) {
                     if (data.next_url) {
                         window.location.href = data.next_url; 
+                    } else if (data.error) {
+                        console.error('Server error:', data.error);
+                        $resultMessage
+                            .text('Error submitting. Please try again.')
+                            .removeClass('d-none alert-success')
+                            .addClass('alert-danger');
+                        isSubmitting = false; 
+                        $submitBtn.prop('disabled', false); 
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -135,5 +160,46 @@ $(document).ready(function() {
                 }
             });
         }, 1500); // Wait 1.5 seconds 
+
+        // Store the time when submitting the answer
+        const questionTimes = JSON.parse(localStorage.getItem('questionTimes') || '[]');
+        questionTimes.push({
+            question: parseInt($('#timer').data('question-num')),
+            time: timeSpent
+        });
+        localStorage.setItem('questionTimes', JSON.stringify(questionTimes));
+        clearInterval(timerInterval);
     });
+
+    // Results page functionality
+    if ($('#question-times').length) {
+        const questionTimes = JSON.parse(localStorage.getItem('questionTimes') || '[]');
+        let totalTime = 0;
+
+        // Sort times by question number
+        questionTimes.sort((a, b) => a.question - b.question);
+
+        questionTimes.forEach((item, index) => {
+            const listItem = $('<div>')
+                .addClass('list-group-item d-flex justify-content-between align-items-center')
+                .html(`
+                    <span>Question ${item.question}</span>
+                    <span class="badge bg-info rounded-pill">${item.time} seconds</span>
+                `);
+            $('#question-times').append(listItem);
+            totalTime += item.time;
+        });
+
+        // Format total time
+        const minutes = Math.floor(totalTime / 60);
+        const seconds = totalTime % 60;
+        const timeString = minutes > 0 
+            ? `${minutes} minute${minutes > 1 ? 's' : ''} and ${seconds} second${seconds !== 1 ? 's' : ''}`
+            : `${seconds} second${seconds !== 1 ? 's' : ''}`;
+        
+        $('#total-time').text(timeString);
+        
+        // Clear the stored times after displaying them
+        localStorage.removeItem('questionTimes');
+    }
 });

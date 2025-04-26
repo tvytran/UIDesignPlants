@@ -13,7 +13,7 @@
         {# Dynamic message based on score - Using Bootstrap Alert #}
         <div class="alert {{ 'alert-success' if score_percent >= 75 else ('alert-info' if score_percent >= 50 else 'alert-warning') }} mx-auto" role="alert" style="max-width: 600px;">
             <h4 class="alert-heading fw-bold">
-                 {% if score_percent == 100 %}
+                {% if score_percent == 100 %}
                     Perfect Score! 🥳
                 {% elif score_percent >= 75 %}
                     Great Job! 👍
@@ -24,7 +24,7 @@
                 {% endif %}
             </h4>
             <p class="mb-0">
-                 {% if score_percent == 100 %}
+                {% if score_percent == 100 %}
                     You're a plant expert!
                 {% elif score_percent >= 75 %}
                     You really know your plants!
@@ -50,6 +50,7 @@
                     <th scope="col" class="px-3 py-2">Your Placement</th>
                     <th scope="col" class="px-3 py-2">Correct Zone</th>
                     <th scope="col" class="px-3 py-2 text-center">Result</th>
+                    <th scope="col" class="px-3 py-2 text-center">Time Taken</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,6 +66,10 @@
                             <span class="badge bg-danger rounded-pill py-1 px-2"><i class="bi bi-x-circle me-1"></i> Incorrect</span>
                         {% endif %}
                     </td>
+                    <td class="px-3 py-2 text-center">
+                        {% set time = question_times[loop.index0].time if question_times and loop.index0 < question_times|length else 0 %}
+                        <span class="badge bg-info rounded-pill py-1 px-2">{{ time }} seconds</span>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -73,12 +78,11 @@
 
     <div class="text-center d-grid gap-3 d-sm-flex justify-content-sm-center">
         <a href="{{ url_for('reset_quiz') }}" class="btn btn-success btn-lg">
-           <i class="bi bi-arrow-clockwise me-2"></i>Try Again?
+            <i class="bi bi-arrow-clockwise me-2"></i>Try Again?
         </a>
-         <a href="{{ url_for('home') }}" class="btn btn-outline-secondary btn-lg">
+        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary btn-lg">
             <i class="bi bi-house-door me-2"></i>Go Home
         </a>
     </div>
 </div>
-
 {% endblock %}

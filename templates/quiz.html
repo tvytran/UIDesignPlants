@@ -9,6 +9,7 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="badge bg-success rounded-pill">Question {{ question_num }} of 4</span>
             <span class="badge bg-success rounded-pill">{{ ((question_num - 1) / 4 * 100) | round }}% Complete</span>
+            <span class="badge bg-info rounded-pill" id="timer" data-question-num="{{ question_num }}">Time: 0s</span>
         </div>
         <div class="progress" style="height: 10px;">
             <div class="progress-bar bg-success" 
@@ -68,37 +69,10 @@
 {% endblock %}
 
 {% block extra_css %}
-<style>
-    /* Custom styles for quiz elements if needed */
-    .quiz-dropzone {
-        transition: border-color 0.2s ease-in-out;
-    }
-    #draggable-plant.dragging {
-        opacity: 0.5;
-        cursor: grabbing;
-        transform: scale(1.1);
-        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
-    }
-     /* Style for dropzone when plant is ready to submit */
-    .quiz-dropzone-container.ready-to-submit #room-image-dropzone {
-         border: 3px solid var(--duo-blue) !important; /* Use Bootstrap info blue */
-         box-shadow: 0 0 10px rgba(var(--bs-info-rgb), 0.5);
-    }
-    /* Style for dropzone on correct */
-     .quiz-dropzone-container.correct #room-image-dropzone {
-         border: 3px solid var(--duo-green) !important; /* Bootstrap success green */
-         box-shadow: 0 0 10px rgba(var(--bs-success-rgb), 0.5);
-     }
-     /* Style for dropzone on incorrect */
-      .quiz-dropzone-container.incorrect #room-image-dropzone {
-         border: 3px solid var(--bs-danger) !important; /* Bootstrap danger red */
-          box-shadow: 0 0 10px rgba(var(--bs-danger-rgb), 0.5);
-     }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 {% endblock %}
 
-
 {% block scripts %}
-    {# Ensure script.js (which will contain jQuery code) is loaded #}
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}

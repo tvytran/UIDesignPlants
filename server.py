@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 import json
 import datetime
+import os
 
 app = Flask(__name__)
 app.secret_key = 'plant-quiz-secret'
@@ -20,6 +21,28 @@ def record_user_activity(activity_type, details=None):
     
     session['user_activity'].append(activity)
     session.modified = True  # Ensure the session is saved
+
+def save_quiz_result(result_data):
+    """Save quiz result to a JSON file"""
+    results_file = 'static/js/quiz_results.json'
+    
+    # Load existing results if file exists
+    if os.path.exists(results_file):
+        with open(results_file, 'r') as f:
+            try:
+                results = json.load(f)
+            except json.JSONDecodeError:
+                results = []
+    else:
+        results = []
+    
+    # Add new result with timestamp
+    result_data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    results.append(result_data)
+    
+    # Save updated results
+    with open(results_file, 'w') as f:
+        json.dump(results, f, indent=2)
 
 # Load plant data
 with open('static/js/plants.json') as f:
@@ -136,35 +159,84 @@ def quiz(question_num):
 
 @app.route('/submit-plant', methods=['POST'])
 def submit_plant():
-    data = request.get_json()
-    plant = data['plant']
-    zone = data['zone']
+    try:
+        data = request.get_json()
+        if not data or 'plant' not in data or 'zone' not in data:
+            return jsonify({'error': 'Invalid data'}), 400
 
-    with open('static/js/quiz.json') as f:
-        quiz_data = json.load(f)['questions']
+        plant = data['plant']
+        zone = data['zone']
+        time_spent = data.get('time_spent', 0)
 
-    correct_zone = next(q['correct_zone'] for q in quiz_data if q['plant'] == plant)
-    is_correct = zone == correct_zone
+        with open('static/js/quiz.json') as f:
+            quiz_data = json.load(f)['questions']
 
-    if 'quiz_placements' not in session:
-        session['quiz_placements'] = []
+        # Find the correct zone for this plant
+        correct_zone = None
+        for q in quiz_data:
+            if q['plant'] == plant:
+                correct_zone = q['correct_zone']
+                break
 
-    session['quiz_placements'].append({
-        'plant': plant,
-        'zone': zone,
-        'correct_zone': correct_zone,
-        'correct': is_correct
-    })
+        if not correct_zone:
+            return jsonify({'error': 'Plant not found in quiz data'}), 400
 
-    session.modified = True
-    return jsonify({'next_url': url_for('quiz', question_num=len(session['quiz_placements']) + 1)})
+        is_correct = zone == correct_zone
+
+        # Initialize session variables if they don't exist
+        if 'quiz_placements' not in session:
+            session['quiz_placements'] = []
+        if 'question_times' not in session:
+            session['question_times'] = []
+
+        # Add the placement
+        session['quiz_placements'].append({
+            'plant': plant,
+            'zone': zone,
+            'correct_zone': correct_zone,
+            'correct': is_correct
+        })
+        
+        # Add the time
+        session['question_times'].append({
+            'question': len(session['quiz_placements']),
+            'time': time_spent
+        })
+
+        session.modified = True
+
+        # Check if we've reached the end of the quiz
+        next_question = len(session['quiz_placements']) + 1
+        if next_question > len(quiz_data):
+            # Save the complete quiz result
+            result_data = {
+                'placements': session['quiz_placements'],
+                'times': session['question_times'],
+                'score': sum(1 for p in session['quiz_placements'] if p['correct']),
+                'total': len(session['quiz_placements'])
+            }
+            save_quiz_result(result_data)
+            return jsonify({'next_url': url_for('results')})
+        else:
+            return jsonify({'next_url': url_for('quiz', question_num=next_question)})
+    except Exception as e:
+        print(f"Error in submit_plant: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/results')
 def results():
     placements = session.get('quiz_placements', [])
     correct = sum(1 for p in placements if p['correct'])
     total = len(placements)
-    return render_template('result.html', placements=placements, score=correct, total=total)
+    
+    # Get question times from session
+    question_times = session.get('question_times', [])
+    
+    return render_template('result.html', 
+                         placements=placements, 
+                         score=correct, 
+                         total=total,
+                         question_times=question_times)
 
 @app.route('/reset-quiz')
 def reset_quiz():

@@ -39,15 +39,15 @@
         {# Container for the drop zone #}
         <div id="background-container" 
              class="quiz-dropzone-container position-relative w-100 mx-auto rounded border border-secondary bg-light overflow-hidden shadow-sm" 
-             style="max-width: 600px; padding-top: 66.66%;"> {# Aspect ratio container #}
+             style="max-width: 600px; height: 400px;">
             
              {# Actual Room Image (will be the drop target) #}
              <img id="room-image-dropzone" 
-                  src="{{ url_for('static', filename='images/istockphoto-149468256-612x612.jpg') }}" 
+                  src="{{ url_for('static', filename='images/quiz_image.jpg') }}" 
                   alt="Room background for dropping plant"
                   data-correct-zone="{{ question.correct_zone }}" 
                   class="position-absolute top-0 start-0 w-100 h-100" 
-                  style="object-fit: cover; z-index: 1;"/> {# Fills container, behind dropped plant #}
+                  style="object-fit: cover; z-index: 1;"/>
 
              {# Dropped plant will be appended here by JS, above the background img #}
         </div>

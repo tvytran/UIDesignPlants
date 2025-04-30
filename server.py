@@ -59,6 +59,8 @@ def home():
 @app.route('/plants')
 def plants():
     processed_plants = {}
+    total_plants = len(plants_data['plants']) # Get total number of plants
+
     for plant_id, plant_details in plants_data['plants'].items():
         # Deep copy to avoid modifying the original data if it's used elsewhere
         current_plant = plant_details.copy() 
@@ -74,14 +76,23 @@ def plants():
         current_plant['short_description'] = (description[:100] + '...') if len(description) > 100 else description
         processed_plants[plant_id] = current_plant
         
+    # Calculate visited plants progress
+    user_activity = session.get('user_activity', [])
+    visited_plant_ids = {activity['details'] for activity in user_activity if activity['type'] == 'plant_selection' and isinstance(activity['details'], str)}
+    visited_count = len(visited_plant_ids)
+
     record_user_activity('page_view', 'plants_list')
-    # Pass the processed dictionary to the template
-    return render_template('plants.html', plants=processed_plants) 
+    # Pass the processed dictionary and progress data to the template
+    return render_template('plants.html', 
+                           plants=processed_plants,
+                           visited_count=visited_count,
+                           total_plants=total_plants) 
 
 @app.route('/plants/<plant_id>')
 def plant_detail(plant_id):
     if plant_id in plants_data['plants']:
         plant = plants_data['plants'][plant_id]
+        total_plants = len(plants_data['plants']) # Get total number of plants
         
         # Get list of all plant IDs for navigation
         plant_ids = list(plants_data['plants'].keys())
@@ -118,21 +129,29 @@ def plant_detail(plant_id):
         except Exception as e:
              print(f"Error loading or parsing quiz.json in plant_detail: {e}")
 
-        record_user_activity('plant_selection', plant_id)
+        # Record selection *before* calculating progress to include current page
+        record_user_activity('plant_selection', plant_id) 
         
+        # Calculate visited plants progress (after recording current visit)
+        user_activity = session.get('user_activity', [])
+        visited_plant_ids = {activity['details'] for activity in user_activity if activity['type'] == 'plant_selection' and isinstance(activity['details'], str)}
+        visited_count = len(visited_plant_ids)
+
         # Ensure the plant dictionary passed to detail also has necessary fields
         plant_details = plants_data['plants'][plant_id].copy()
         plant_details['id'] = plant_id # Ensure ID is present
         plant_details['facts'] = plant_details.get('facts', []) # Ensure facts list exists
         plant_details['scientific_name'] = plant_details.get('scientific_name', '') # Ensure scientific name exists
 
-        # Pass all necessary data to the single detail template
+        # Pass all necessary data (including progress) to the single detail template
         return render_template('plant-detail.html', 
                                plant=plant_details,
                                plant_id=plant_id, 
                                correct_zone=correct_zone,
                                prev_plant=prev_plant,
-                               next_plant=next_plant)
+                               next_plant=next_plant,
+                               visited_count=visited_count,
+                               total_plants=total_plants)
     else:
         return "Plant not found", 404
 
@@ -248,8 +267,57 @@ def reset_quiz():
 
 @app.route('/activity-history')
 def activity_history():
-    activities = session.get('user_activity', [])
-    return render_template('activity-history.html', activities=activities)
+    user_activity = session.get('user_activity', [])
+    return render_template('activity-history.html', activity_log=user_activity)
+
+# New route to log time spent on learn pages
+@app.route('/log-learn-time', methods=['POST'])
+def log_learn_time():
+    try:
+        # Use force=True to ignore Content-Type if it's not application/json
+        # navigator.sendBeacon often sends as 'text/plain'
+        data = request.get_json(force=True) 
+        if not data or 'plant_id' not in data or 'duration' not in data:
+            print("Invalid learn time data received:", data)
+            return jsonify(success=False, error="Invalid data"), 400
+
+        plant_id = data['plant_id']
+        duration_ms = data['duration']
+
+        if not isinstance(duration_ms, int) or duration_ms < 0:
+             print("Invalid duration value received:", duration_ms)
+             return jsonify(success=False, error="Invalid duration"), 400
+
+        # Ensure user_activity list exists in session
+        if 'user_activity' not in session:
+            session['user_activity'] = []
+        
+        # Record the duration event
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        activity = {
+            'timestamp': timestamp,
+            'type': 'learn_duration',
+            'details': {
+                'plant_id': plant_id,
+                'duration_ms': duration_ms
+            }
+        }
+        session['user_activity'].append(activity)
+        session.modified = True
+        
+        # print(f"Logged learn time for {plant_id}: {duration_ms}ms") # Optional: server-side logging
+        return jsonify(success=True)
+
+    except Exception as e:
+        print(f"Error in /log-learn-time: {str(e)}")
+        # Log the raw data for debugging if parsing fails
+        try:
+             raw_data = request.get_data(as_text=True)
+             print(f"Raw data received: {raw_data}")
+        except Exception as read_e:
+             print(f"Could not read raw data: {read_e}")
+        
+        return jsonify(success=False, error="Internal server error"), 500
 
 @app.route('/try_youorself')
 def try_yourself():

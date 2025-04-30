@@ -1,10 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}Browse Plants{% endblock %}
+{% block title %}Browse Plants - PlantPal{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <h1 class="mb-4 text-success">Explore Our Plants</h1>
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-success">Explore Our Plants</h1>
+        <p class="lead text-muted">Find the perfect green companion for your space.</p>
+    </div>
+
+    {# Learn Progress Bar Section #}
+    {% if total_plants and total_plants > 0 %}
+    {% set progress_percent = (visited_count / total_plants * 100) | round %}
+    <div class="mb-5 mx-auto" style="max-width: 600px;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-success rounded-pill">Viewed {{ visited_count }} of {{ total_plants }} Plants</span>
+            <span class="badge bg-success rounded-pill">{{ progress_percent }}% Explored</span>
+        </div>
+        <div class="progress" style="height: 10px;">
+            <div class="progress-bar bg-success" 
+                 role="progressbar" 
+                 style="width: {{ progress_percent }}%;" 
+                 aria-valuenow="{{ visited_count }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="{{ total_plants }}">
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Search Bar -->
     <div class="input-group mb-4 shadow-sm">
@@ -35,6 +58,15 @@
     <div id="noResults" class="alert alert-warning mt-4 d-none" role="alert">
       No plants found matching your search.
     </div>
+
+    {# Add Start Quiz Button #}
+    <div class="text-center mt-5 pt-4 border-top">
+        <h3 class="fw-light mb-3">Ready to test your knowledge?</h3>
+        <a href="{{ url_for('quiz', question_num=1) }}" class="btn btn-info btn-lg px-4">
+            <i class="bi bi-play-circle me-2"></i>Start the Quiz
+        </a>
+    </div>
+
 </div>
 
 {% endblock %}

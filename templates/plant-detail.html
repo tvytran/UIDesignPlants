@@ -3,9 +3,30 @@
 {% block title %}{{ plant.name }} - PlantPal{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-4">
+
+    {# Learn Progress Bar Section - Placed before title #}
+    {% if total_plants and total_plants > 0 %}
+    {% set progress_percent = (visited_count / total_plants * 100) | round %}
+    <div class="mb-4 mx-auto" style="max-width: 600px;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-success rounded-pill">Viewed {{ visited_count }} of {{ total_plants }} Plants</span>
+            <span class="badge bg-success rounded-pill">{{ progress_percent }}% Explored</span>
+        </div>
+        <div class="progress" style="height: 10px;">
+            <div class="progress-bar bg-success" 
+                 role="progressbar" 
+                 style="width: {{ progress_percent }}%;" 
+                 aria-valuenow="{{ visited_count }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="{{ total_plants }}">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Title Section -->
-    <div class="text-center mb-4">
+    <div class="text-center mb-3">
         <h1 class="display-5 fw-bold text-success">{{ plant.name }}</h1>
         {% if plant.scientific_name %}
         <p class="text-muted fst-italic">{{ plant.scientific_name }}</p>
@@ -13,7 +34,7 @@
     </div>
 
     <!-- Main Content Row -->
-    <div class="row mb-4 g-4 align-items-start">
+    <div class="row mb-3 g-4 align-items-start">
         <div class="col-md-5 text-center">
             <img src="{{ url_for('static', filename='images/' + plant.image) }}" alt="{{ plant.name }}" 
                  class="img-fluid rounded-3 shadow-sm border" style="max-height: 350px; object-fit: cover;">
@@ -135,7 +156,7 @@
     </div>
 
     <!-- Navigation Buttons -->
-    <div class="mt-4 text-center">
+    <div class="mt-3 text-center">
         <div class="row justify-content-center align-items-center g-3">
             <div class="col-auto">
                 {% if prev_plant %}
@@ -158,7 +179,49 @@
             </div>
         </div>
     </div>
+
+    {# Add Start Quiz Button #}
+    <div class="text-center mt-4 pt-3 border-top">
+        <h3 class="fw-light mb-3">Ready to test your knowledge?</h3>
+        <a href="{{ url_for('quiz', question_num=1) }}" class="btn btn-info btn-lg px-4">
+            <i class="bi bi-play-circle me-2"></i>Start the Quiz
+        </a>
+    </div>
 </div>
 {% endblock %}
 
-{% block scripts %}{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const plantId = {{ plant_id | tojson }}; // Get plant_id from Flask context
+    const startTime = Date.now();
+    
+    const logLearnTime = () => {
+        // Check if browser supports sendBeacon
+        if (navigator.sendBeacon) {
+            const duration = Date.now() - startTime;
+            const data = JSON.stringify({ plant_id: plantId, duration: duration });
+            navigator.sendBeacon('/log-learn-time', data);
+            console.log(`Sent learn time for ${plantId}: ${duration}ms`);
+        } else {
+            console.warn('navigator.sendBeacon not supported, cannot log learn time reliably.');
+            // Fallback or alternative could be added here if needed
+        }
+    };
+
+    // Use 'pagehide' event as it's more reliable for mobile and bfcache scenarios
+    // 'visibilitychange' to 'hidden' also covers tab switching, but might double-log 
+    // if the user returns. 'pagehide' is usually best for final exit/navigation.
+    window.addEventListener('pagehide', logLearnTime, false);
+
+    // Optional: Log time if visibility changes to hidden (e.g., tab switch)
+    // Might lead to multiple logs for the same page view if user switches back and forth.
+    // document.addEventListener('visibilitychange', () => {
+    //     if (document.visibilityState === 'hidden') {
+    //         // Consider if you want to log here or only on final exit (pagehide)
+    //         // logLearnTime(); // Uncomment if needed, but be aware of potential duplicates
+    //     }
+    // });
+});
+</script>
+{% endblock %}

@@ -184,6 +184,31 @@
              padding-bottom: 1rem;
         }
 
+        /* --- Quiz Specific Interaction Styles --- */
+        #draggable-plant.dragging {
+            opacity: 0.5; /* Make plant semi-transparent while dragging */
+            transform: scale(1.1); /* Slightly enlarge */
+            cursor: grabbing; /* Change cursor */
+        }
+        
+        /* Style the drop container based on state (JS adds/removes these classes) */
+        .quiz-dropzone-container {
+            transition: border-color 0.3s ease; /* Smooth transition for border */
+        }
+
+        /* Indicate ready state after drop, before submit */
+        .quiz-dropzone-container.ready-to-submit {
+            border: 3px dashed var(--bs-info) !important; /* Blue dashed border */
+        }
+        /* Feedback after submit: Correct */
+        .quiz-dropzone-container.correct {
+             border: 4px solid var(--bs-success) !important; /* Green solid border */
+        }
+        /* Feedback after submit: Incorrect */
+        .quiz-dropzone-container.incorrect {
+             border: 4px solid var(--bs-danger) !important; /* Red solid border */
+        }
+
     </style>
     {% block extra_css %}{% endblock %}
 </head>

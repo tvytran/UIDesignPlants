@@ -262,8 +262,22 @@ def reset_quiz():
     session.pop('quiz_placements', None)
     session.pop('quiz_start_time', None)
     return redirect(url_for('quiz', question_num=1))
-#quiz
 
+@app.route('/reset-learn-progress', methods=['POST'])
+def reset_learn_progress():
+    """Clears the 'plant_selection' entries from user activity in the session."""
+    if 'user_activity' in session:
+        initial_count = len(session['user_activity'])
+        session['user_activity'] = [activity for activity in session['user_activity'] 
+                                      if activity.get('type') != 'plant_selection']
+        # Check if modification happened before marking modified
+        if len(session['user_activity']) != initial_count:
+             session.modified = True
+        print(f"Reset learn progress. Removed {initial_count - len(session['user_activity'])} entries.")
+        return jsonify(success=True, message="Learn progress reset.")
+    else:
+        print("Reset learn progress requested, but no user activity found in session.")
+        return jsonify(success=True, message="No learn progress to reset.")
 
 @app.route('/activity-history')
 def activity_history():

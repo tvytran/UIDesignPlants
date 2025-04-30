@@ -12,6 +12,10 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="badge bg-success rounded-pill">Viewed {{ visited_count }} of {{ total_plants }} Plants</span>
             <span class="badge bg-success rounded-pill">{{ progress_percent }}% Explored</span>
+            <span class="badge bg-info rounded-pill" id="learn-timer">Time: 0s</span>
+            <a href="#" id="resetLearnProgressBtn" class="small text-danger text-decoration-none ms-2" title="Reset Learn Progress" role="button">
+                <i class="bi bi-arrow-clockwise"></i> Reset
+            </a>
         </div>
         <div class="progress" style="height: 10px;">
             <div class="progress-bar bg-success" 
@@ -193,35 +197,52 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const plantId = {{ plant_id | tojson }}; // Get plant_id from Flask context
+    const plantId = {{ plant_id | tojson }};
     const startTime = Date.now();
-    
-    const logLearnTime = () => {
-        // Check if browser supports sendBeacon
-        if (navigator.sendBeacon) {
-            const duration = Date.now() - startTime;
-            const data = JSON.stringify({ plant_id: plantId, duration: duration });
-            navigator.sendBeacon('/log-learn-time', data);
-            console.log(`Sent learn time for ${plantId}: ${duration}ms`);
-        } else {
-            console.warn('navigator.sendBeacon not supported, cannot log learn time reliably.');
-            // Fallback or alternative could be added here if needed
+    const timerElement = document.getElementById('learn-timer');
+    let timerInterval = null;
+
+    // Function to update timer display
+    const updateTimerDisplay = () => {
+        if (timerElement) {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            timerElement.textContent = `Time: ${elapsedTime}s`;
         }
     };
 
-    // Use 'pagehide' event as it's more reliable for mobile and bfcache scenarios
-    // 'visibilitychange' to 'hidden' also covers tab switching, but might double-log 
-    // if the user returns. 'pagehide' is usually best for final exit/navigation.
+    // Start the timer interval
+    if (timerElement) {
+        updateTimerDisplay(); // Initial display
+        timerInterval = setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Function to log time and clear interval
+    const logLearnTime = () => {
+        // Clear the interval timer
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        // Check if browser supports sendBeacon
+        if (navigator.sendBeacon) {
+            const duration = Date.now() - startTime;
+            // Only send if duration is reasonable (e.g., > 1 second)
+            if (duration > 1000) { 
+                const data = JSON.stringify({ plant_id: plantId, duration: duration });
+                navigator.sendBeacon('/log-learn-time', data);
+                console.log(`Sent learn time for ${plantId}: ${duration}ms`);
+            } else {
+                console.log(`Duration too short for ${plantId}, not sending.`);
+            }
+        } else {
+            console.warn('navigator.sendBeacon not supported, cannot log learn time reliably.');
+        }
+    };
+
+    // Add listener to log time when page is hidden/closed
     window.addEventListener('pagehide', logLearnTime, false);
 
-    // Optional: Log time if visibility changes to hidden (e.g., tab switch)
-    // Might lead to multiple logs for the same page view if user switches back and forth.
-    // document.addEventListener('visibilitychange', () => {
-    //     if (document.visibilityState === 'hidden') {
-    //         // Consider if you want to log here or only on final exit (pagehide)
-    //         // logLearnTime(); // Uncomment if needed, but be aware of potential duplicates
-    //     }
-    // });
 });
 </script>
 {% endblock %}

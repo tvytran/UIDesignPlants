@@ -260,6 +260,26 @@
       $(document).ready(function() {
         const currentYear = new Date().getFullYear();
         $('#currentYear').text(currentYear); 
+
+        // Add click handler for the reset learn progress button
+        $(document).on('click', '#resetLearnProgressBtn', function() {
+            if (confirm('Are you sure you want to reset your learning progress?')) {
+                $.ajax({
+                    url: "{{ url_for('reset_learn_progress') }}", // Use url_for for safety
+                    type: 'POST',
+                    contentType: 'application/json', // Though not sending data, good practice
+                    success: function(response) {
+                        console.log('Learn progress reset successfully:', response.message);
+                        // Reload the current page to reflect the change
+                        window.location.reload(); 
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error resetting learn progress:', status, error);
+                        alert('Failed to reset progress. Please try again.');
+                    }
+                });
+            }
+        });
       });
     </script>
 </body>

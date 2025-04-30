@@ -12,18 +12,23 @@
     {# Learn Progress Bar Section #}
     {% if total_plants and total_plants > 0 %}
     {% set progress_percent = (visited_count / total_plants * 100) | round %}
-    <div class="mb-5 mx-auto" style="max-width: 600px;">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="badge bg-success rounded-pill">Viewed {{ visited_count }} of {{ total_plants }} Plants</span>
-            <span class="badge bg-success rounded-pill">{{ progress_percent }}% Explored</span>
-        </div>
-        <div class="progress" style="height: 10px;">
-            <div class="progress-bar bg-success" 
-                 role="progressbar" 
-                 style="width: {{ progress_percent }}%;" 
-                 aria-valuenow="{{ visited_count }}" 
-                 aria-valuemin="0" 
-                 aria-valuemax="{{ total_plants }}">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-5 mx-auto p-3 rounded border bg-light" style="max-width: 800px;">
+        <div class="flex-grow-1 mb-3 mb-sm-0 me-sm-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-success rounded-pill">Viewed {{ visited_count }} of {{ total_plants }} Plants</span>
+                <span class="badge bg-success rounded-pill">{{ progress_percent }}% Explored</span>
+                <a href="#" id="resetLearnProgressBtn" class="small text-danger text-decoration-none ms-2" title="Reset Learn Progress" role="button">
+                    <i class="bi bi-arrow-clockwise"></i> Reset
+                </a>
+            </div>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-success" 
+                     role="progressbar" 
+                     style="width: {{ progress_percent }}%;" 
+                     aria-valuenow="{{ visited_count }}" 
+                     aria-valuemin="0" 
+                     aria-valuemax="{{ total_plants }}">
+                </div>
             </div>
         </div>
     </div>

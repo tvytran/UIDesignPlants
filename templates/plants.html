@@ -44,11 +44,16 @@
     <div id="plantList" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {% for plant in plants.values() %}
         <div class="col plant-card-container"> {# Wrapper for easier JS targeting #}
-            <div class="card h-100 shadow-sm" style="overflow: hidden;">
+            {# Add 'card-visited' class if plant ID is in the visited set #}
+            <div class="card h-100 shadow-sm {% if plant['id'] in visited_plant_ids %}card-visited{% endif %}" style="overflow: hidden;">
                  <img src="{{ url_for('static', filename='images/' + plant['image']) }}" class="card-img-top" alt="{{ plant['name'] }}" style="height: 15rem; object-fit: cover;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">
                          <a href="{{ url_for('plant_detail', plant_id=plant['id']) }}" class="text-decoration-none text-dark stretched-link">{{ plant['name'] }}</a>
+                         {# Add Learned Badge if visited #}
+                         {% if plant['id'] in visited_plant_ids %}
+                           <span class="badge bg-success rounded-pill ms-1 align-middle small" style="font-size: 0.65em;">Learned</span>
+                         {% endif %}
                     </h5>
                     <p class="card-text text-muted small">{{ plant['short_description'] }}</p>
                 </div>

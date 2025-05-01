@@ -86,7 +86,8 @@ def plants():
     return render_template('plants.html', 
                            plants=processed_plants,
                            visited_count=visited_count,
-                           total_plants=total_plants) 
+                           total_plants=total_plants,
+                           visited_plant_ids=visited_plant_ids)
 
 @app.route('/plants/<plant_id>')
 def plant_detail(plant_id):

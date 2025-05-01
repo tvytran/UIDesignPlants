@@ -5,22 +5,24 @@
 {% block title %}PlantPal - Welcome{% endblock %}
 
 {% block content %}
-<div class="row align-items-center g-5 py-5">
-    <div class="col-lg-7 text-center text-lg-start">
-        <h1 class="display-4 fw-bold lh-1 text-success mb-3">Welcome to PlantPal!</h1>
-        <p class="col-lg-10 fs-5 lead mb-4">
-            Discover the perfect plants for your space and learn how to care for them. Take our quick quiz to get personalized recommendations!
-        </p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a href="{{ url_for('plants') }}" class="btn btn-light border-dark btn-lg px-4 me-md-2">Learn</a>
-            <a href="{{ url_for('quiz', question_num=1) }}" class="btn btn-info btn-lg px-4">Take the Quiz</a>
-        </div>
-    </div>
-    <div class="col-10 col-sm-8 col-lg-5 mx-auto">
-        {# Updated image source #}
-        <img src="{{ url_for('static', filename='images/potted-hauseplant-set-collection-of-succulents-cacti-or-green-foliage-plants-growing-in-planters-or-flower-pots-illustration-in-flat-style-vector.jpg') }}" 
-             class="d-block mx-lg-auto img-fluid rounded-4 shadow-lg" 
-             alt="Collection of potted house plants" loading="lazy" width="700" height="500">
+{# Centered Content #}
+<div class="text-center mx-auto py-5" style="max-width: 600px;">
+    <h1 class="display-4 fw-bold lh-1 text-success mb-3">Welcome to PlantPal!</h1>
+    <p class="fs-5 lead mb-4">
+        Discover the perfect plants for your space and learn how to care for them. Take our quick quiz to get personalized recommendations!
+    </p>
+    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+        <a href="{{ url_for('plants') }}" class="btn btn-light border-dark btn-lg px-4">Learn</a>
+        <a href="{{ url_for('quiz', question_num=1) }}" class="btn btn-info btn-lg px-4">Take the Quiz</a>
     </div>
 </div>
+
+{# Image below centered content #}
+<div class="text-center mt-4">
+    <img src="{{ url_for('static', filename='images/potted-hauseplant-set-collection-of-succulents-cacti-or-green-foliage-plants-growing-in-planters-or-flower-pots-illustration-in-flat-style-vector.jpg') }}" 
+         class="d-block mx-auto img-fluid rounded-4 shadow-lg" 
+         style="max-width: 500px; height: auto;" {# Adjusted max-width #}
+         alt="Collection of potted house plants" loading="lazy">
+</div>
+
 {% endblock %}

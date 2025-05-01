@@ -232,6 +232,20 @@
              color: var(--duo-text);
         }
 
+        /* Add back the active tab rule */
+        .nav-tabs .nav-link.active,
+        .nav-tabs .nav-item.show .nav-link {
+            color: var(--duo-text); /* Regular text color */
+            background-color: var(--duo-white); /* White background for active tab */
+            border-color: var(--bs-border-color) var(--bs-border-color) transparent; /* Connect to content below */
+            font-weight: 700;
+        }
+
+        /* Make tab content visually connect */
+         .tab-content {
+             border: 2px solid var(--bs-border-color);
+         }
+
     </style>
     {% block extra_css %}{% endblock %}
 </head>

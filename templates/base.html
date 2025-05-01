@@ -209,6 +209,29 @@
              border: 4px solid var(--bs-danger) !important; /* Red solid border */
         }
 
+        .nav-tabs {
+             border-bottom-width: 2px; /* Match footer/header border */
+             border-color: var(--bs-border-color);
+        }
+        /* Re-applying .nav-tabs .nav-link rule without margin-bottom */
+        .nav-tabs .nav-link {
+            border: 2px solid transparent; /* Base border */
+            border-top-left-radius: 0.75rem; /* Match button radius */
+            border-top-right-radius: 0.75rem; /* Match button radius */
+            font-weight: 700; /* Match button/nav boldness */
+            color: var(--duo-gray-medium); /* Muted color for inactive */
+            background-color: var(--duo-gray-hover); /* Light background for inactive */
+            padding: 0.6rem 1.25rem; /* Match button padding */
+            text-transform: none; /* Override general nav link uppercase */
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .nav-tabs .nav-link:hover,
+        .nav-tabs .nav-link:focus {
+             background-color: var(--duo-gray-hover); /* Use darker gray for hover */
+             border-color: var(--duo-gray-medium);
+             color: var(--duo-text);
+        }
+
     </style>
     {% block extra_css %}{% endblock %}
 </head>

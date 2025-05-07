@@ -272,7 +272,7 @@
                         <a class="nav-link {{ 'active' if request.endpoint == 'home' else '' }}" href="{{ url_for('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ 'active' if request.endpoint == 'plants' or request.endpoint == 'plant_detail' else '' }}" href="{{ url_for('plants') }}">Plants</a>
+                        <a class="nav-link {{ 'active' if request.endpoint == 'plants' or request.endpoint == 'plant_detail' else '' }}" href="{{ url_for('plants') }}">Learn</a>
                     </li>
                     <li class="nav-item ms-sm-3 mt-2 mt-sm-0">
                         <a class="btn btn-info btn-sm {{ 'active disabled' if request.endpoint in ['quiz', 'results'] else '' }}" href="{{ url_for('quiz', question_num=1) }}">

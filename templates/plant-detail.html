@@ -70,8 +70,8 @@
                             <p>{{ plant.watering if plant.watering else "Watering information not available." }}</p>
                         </div>
                         <div class="col-md-6">
-                            <h5><i class="bi bi-sun-fill text-warning me-2"></i>Sunlight</h5>
-                            <p>{{ plant.sunlight if plant.sunlight else "Sunlight requirements information not available." }}</p>
+                            <h5><i class="bi bi-stack text-secondary me-2"></i>Soil</h5>
+                            <p>{{ plant.soil if plant.soil else "General purpose potting mix is usually suitable. Ensure good drainage." }}</p>
                         </div>
                     </div>
                 </div>
@@ -115,15 +115,15 @@
                                      alt="Room lighting guide" 
                                      class="img-fluid rounded shadow-sm">
                                 {% if correct_zone %}
-                                    <div class="position-absolute" style="
-                                        {% if 'bright' in correct_zone %}
-                                            left: 20%; top: 50%;
-                                        {% elif 'medium' in correct_zone %}
-                                            left: 50%; top: 50%;
-                                        {% else %}
-                                            left: 80%; top: 50%;
-                                        {% endif %}
-                                        transform: translate(-50%, -50%); z-index: 2;">
+                                    {% set position_style = "" %}
+                                    {% if 'bright' in correct_zone %}
+                                        {% set position_style = "left: 20%; top: 50%;" %}
+                                    {% elif 'medium' in correct_zone %}
+                                        {% set position_style = "left: 50%; top: 50%;" %}
+                                    {% else %}
+                                        {% set position_style = "left: 80%; top: 50%;" %}
+                                    {% endif %}
+                                    <div class="position-absolute" style="{{ position_style }} transform: translate(-50%, -50%); z-index: 2;">
                                         <img src="{{ url_for('static', filename='images/' + plant.image) }}" 
                                              alt="{{ plant.name }}" 
                                              class="rounded-circle border border-4 border-success"

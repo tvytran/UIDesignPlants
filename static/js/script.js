@@ -89,18 +89,49 @@ $(document).ready(function() {
             // Add ready-to-submit class to the CONTAINER for the border effect
             $dropContainer.removeClass('correct incorrect').addClass('ready-to-submit'); 
 
-            // Determine lighting zone based on drop location (relative to IMAGE)
+            // Define zones based on the light patterns in the original image
             let droppedZone = '';
-            if (dropX < bgWidth / 2 && dropY < bgHeight / 2) droppedZone = 'bright-indirect';
-            else if (dropX >= bgWidth / 2 && dropY < bgHeight / 2) droppedZone = 'low-medium';
-            else if (dropX < bgWidth / 2 && dropY >= bgHeight / 2) droppedZone = 'moderate-indirect';
-            else droppedZone = 'bright-filtered';
-        
+            
+            // Calculate relative position (0-1 range)
+            const relativeX = dropX / bgWidth;
+            const relativeY = dropY / bgHeight;
+            
+            if (relativeX < 0.33 && relativeY < 0.33) {
+                droppedZone = 'bright-indirect';  // Top-left section
+            } else if (relativeX >= 0.33 && relativeX < 0.66 && relativeY < 0.33) {
+                droppedZone = 'bright-indirect';  // Top-middle section
+            } else if (relativeX >= 0.66 && relativeY < 0.33) {
+                droppedZone = 'bright-indirect';  // Top-right section
+            } else if (relativeX < 0.33 && relativeY >= 0.33 && relativeY < 0.66) {
+                droppedZone = 'direct-bright';    // Middle-left section
+            } else if (relativeX >= 0.33 && relativeX < 0.66 && relativeY >= 0.33 && relativeY < 0.66) {
+                droppedZone = 'direct-bright';    // Middle-middle section
+            } else if (relativeX >= 0.66 && relativeY >= 0.33 && relativeY < 0.66) {
+                droppedZone = 'low-medium';       // Middle-right section
+            } else if (relativeX < 0.33 && relativeY >= 0.66 && relativeY < 0.825) {
+                droppedZone = 'direct-bright';    // Bottom-left-top section
+            } else if (relativeX < 0.33 && relativeY >= 0.825) {
+                droppedZone = 'bright-indirect';  // Bottom-left-bottom section
+            } else if (relativeX >= 0.33 && relativeX < 0.66 && relativeY >= 0.66 && relativeY < 0.825) {
+                droppedZone = 'direct-bright';    // Bottom-middle-top section
+            } else if (relativeX >= 0.33 && relativeX < 0.66 && relativeY >= 0.825) {
+                droppedZone = 'bright-indirect';  // Bottom-middle-bottom section
+            } else if (relativeX >= 0.66 && relativeY >= 0.66) {
+                droppedZone = 'low-medium';       // Bottom-right section
+            }
+            
             placement = {
-                plant: droppedPlant.data('plant'), // Get plant id from dragged element
+                plant: droppedPlant.data('plant'),
                 zone: droppedZone
             };
-            console.log("Placed in zone:", droppedZone, "Correct zone:", correctZone);
+            
+            // Enhanced logging
+            console.log("Drop Details:", {
+                position: { x: relativeX, y: relativeY },
+                imageSize: { width: bgWidth, height: bgHeight },
+                detectedZone: droppedZone,
+                correctZone: correctZone
+            });
         } 
     });
     

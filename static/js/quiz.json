@@ -1,8 +1,8 @@
 {
     "questions": [
-      { "plant": "snake-plant", "image": "snake-plant.jpeg", "correct_zone": "bright-indirect" },
-      { "plant": "peace-lily", "image": "peace lily.jpg", "correct_zone": "low-medium" },
-      { "plant": "fiddle-leaf-fig", "image": "fiddle-leaf.jpg", "correct_zone": "bright-filtered" },
-      { "plant": "spider-plant", "image": "spider-plant.jpg", "correct_zone": "moderate-indirect" }
+      { "plant": "snake-plant", "image": "snake-plant.jpeg", "correct_zone": "direct-bright" },
+      { "plant": "peace-lily", "image": "peace lily.jpg", "correct_zone": "bright-indirect" },
+      { "plant": "fiddle-leaf-fig", "image": "fiddle-leaf.jpg", "correct_zone": "direct-bright" },
+      { "plant": "spider-plant", "image": "spider-plant.jpg", "correct_zone": "low-medium" }
     ]
   }

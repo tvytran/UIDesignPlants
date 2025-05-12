@@ -80,10 +80,10 @@
                 <div class="tab-pane fade show active p-4 border border-top-0 rounded-bottom bg-white" id="lighting-tab-pane" role="tabpanel" aria-labelledby="lighting-tab" tabindex="0">
                     <h3 class="mb-3">
                         {% if correct_zone %}
-                            {% if 'bright' in correct_zone %}
-                                Bright Light Zone
-                            {% elif 'medium' in correct_zone %}
-                                Medium Light Zone
+                            {% if 'direct-bright' in correct_zone %}
+                                Direct Bright Light Zone
+                            {% elif 'bright-indirect' in correct_zone %}
+                                Indirect Bright Light Zone
                             {% else %}
                                 Low Light Zone
                             {% endif %}
@@ -98,7 +98,7 @@
                                 {% if 'bright' in correct_zone %}
                                     <li><i class="bi bi-sun-fill text-warning me-2"></i>Place near windows with direct sunlight</li>
                                     <li><i class="bi bi-info-circle text-primary me-2"></i>South or west-facing windows are ideal</li>
-                                {% elif 'medium' in correct_zone %}
+                                {% elif 'bright-indirect' in correct_zone %}
                                     <li><i class="bi bi-sun text-warning me-2"></i>Place in bright, indirect light</li>
                                     <li><i class="bi bi-info-circle text-primary me-2"></i>Few feet away from windows or near east-facing windows</li>
                                 {% else %}

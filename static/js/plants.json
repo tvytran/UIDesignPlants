@@ -9,9 +9,9 @@
         "sunlight": "Prefers bright, indirect light but is highly adaptable to low light conditions.",
         "lighting_diagram": "snake-plant-lighting-diagram.jpg",
         "facts": [
-          "They are great for air purification.",
-          "Snake plants originate from Africa and Asia.",
-          "Snake plants are often found in offices because of they require low maintenance and often used by interior designers."
+          "Are great for air purification.",
+          "Originate from Africa and Asia.",
+          "Are often found in offices because of they require low maintenance and often used by interior designers."
         ]
       },
       "peace-lily": {
@@ -23,8 +23,8 @@
         "sunlight": "Thrives in low to medium indirect light. Avoid direct sunlight which can scorch leaves.",
         "lighting_diagram": "peace-lily-lighting-diagram.jpg",
         "facts": [
-          "a popular house plant known for its elegant white flowers and lush green leaves, symbolizing peace, purity, and tranquility",
-          "popular choice for gift-giving during times of mourning, as well as for decorating homes and office spaces"
+          "A popular house plant known for its elegant white flowers and lush green leaves, symbolizing peace, purity, and tranquility",
+          "A popular choice for gift-giving during times of mourning, as well as for decorating homes and office spaces"
         ]
       },
       "spider-plant": {
@@ -36,9 +36,9 @@
         "sunlight": "Best in moderate to bright indirect light. Can tolerate lower light but may grow slower.",
         "lighting_diagram": "spider-plant-lighting-diagram.jpg",
         "facts": [
-          "Spider plants are effective at removing common indoor pollutants like carbon monoxide.",
-          "Spider plants are known for being low-maintenance and can tolerate some neglect.",
-          "pider plants are non-toxic to pets"
+          "Are effective at removing common indoor pollutants like carbon monoxide.",
+          "Are known for being low-maintenance and can tolerate some neglect.",
+          "Are non-toxic to pets"
         ]
       },
       "fiddle-leaf-fig": {
@@ -50,8 +50,8 @@
         "sunlight": "Needs bright, filtered light, often near an east-facing window. Avoid direct sun and drafts.",
         "lighting_diagram": "fiddle-leaf-fig-lighting-diagram.jpg",
         "facts": [
-          "are popular houseplants known for their large, violin-shaped leaves and ability to purify air",
-          "considered a fickle plant, meaning they don't tolerate being moved or changes in their environment well. ",
+          "Are popular houseplants known for their large, violin-shaped leaves and ability to purify air",
+          "Considered a fickle plant, meaning they don't tolerate being moved or changes in their environment well. ",
           "Pruning the top of the trunk can actually help revive a fiddle leaf fig and encourage new growt "
         ]
       }

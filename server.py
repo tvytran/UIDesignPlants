@@ -48,6 +48,7 @@ def save_quiz_result(result_data):
 with open('static/js/plants.json') as f:
     plants_data = json.load(f)
 
+#commentg
 @app.route('/')
 def home():
     if request.referrer and '/results' in request.referrer:

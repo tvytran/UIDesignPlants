@@ -342,3 +342,6 @@ def try_yourself():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
+
+# For Vercel deployment
+app.debug = False
